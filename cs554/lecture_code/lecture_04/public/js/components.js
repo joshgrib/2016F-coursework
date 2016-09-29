@@ -135,12 +135,24 @@ var RecipeForm = React.createClass({
 
         this.setState({ ingredients: ingredients, newIngredient: "" });
     },
+    addStep: function addStep(e) {
+        var steps = this.state.steps.concat([this.state.newStep]);
+        this.setState({ steps: steps, newStep: "" });
+    },
+    addRecipe: function addRecipe(e) {
+        console.log("button clicked");
+        var recipe = this.state;
+        this.setState({ title: "", description: "" });
+        this.props.addRecipeToList(recipe);
+    },
     changeNewIngredientText: function changeNewIngredientText(e) {
         this.setState({ newIngredient: e.target.value });
     },
+    changeNewStepText: function changeNewStepText(e) {
+        this.setState({ newStep: e.target.value });
+    },
     render: function render() {
         var newTitleText = "New Recipe: " + (this.state.title || '') + " (" + this.state.ingredients.length + " ingredients, " + this.state.steps.length + " steps)";
-        console.log(this.state);
 
         return React.createElement(
             "div",
@@ -168,8 +180,8 @@ var RecipeForm = React.createClass({
                             className: "form-control",
                             id: "newTitle",
                             placeholder: "New Recipe",
-                            onChange: this.changeTitle,
                             value: this.state.title,
+                            onChange: this.changeTitle,
                             type: "text" })
                     )
                 ),
@@ -188,6 +200,7 @@ var RecipeForm = React.createClass({
                             className: "form-control",
                             id: "newDescription",
                             placeholder: "Recipe description",
+                            value: this.state.description,
                             onChange: this.changeDescription })
                     )
                 ),
@@ -239,7 +252,9 @@ var RecipeForm = React.createClass({
                             className: "form-control",
                             type: "text",
                             id: "newIngredientText",
-                            placeholder: "New Step Instructions" })
+                            placeholder: "New Step Instructions",
+                            value: this.state.newStep,
+                            onChange: this.changeNewStepText })
                     )
                 ),
                 React.createElement(
@@ -250,7 +265,7 @@ var RecipeForm = React.createClass({
                         { className: "col-sm-offset-3 col-sm-9" },
                         React.createElement(
                             "button",
-                            { className: "btn btn-primary", type: "button" },
+                            { className: "btn btn-primary", type: "button", onClick: this.addStep },
                             "Add Step"
                         )
                     )
@@ -263,7 +278,7 @@ var RecipeForm = React.createClass({
                         { className: "col-sm-12" },
                         React.createElement(
                             "button",
-                            { type: "submit", className: "btn btn-default" },
+                            { type: "submit", className: "btn btn-default", onClick: this.addRecipe },
                             "Add Recipe"
                         )
                     )
@@ -288,7 +303,7 @@ var RecipeList = React.createClass({
     componentDidMount: function componentDidMount() {
         var _this = this;
 
-        $.ajax({
+        $.ajax({ //the only "line" of jquery
             url: this.props.url,
             dataType: 'json',
             cache: false,
@@ -299,6 +314,10 @@ var RecipeList = React.createClass({
                 console.error(_this.props.url, status, err.toString());
             }
         });
+    },
+    addRecipe: function addRecipe(recipe) {
+        var recipeList = this.state.recipes.concat([recipe]);
+        this.setState({ recipes: recipeList });
     },
     render: function render() {
         var recipeList = this.state.recipes;
@@ -316,7 +335,7 @@ var RecipeList = React.createClass({
             { className: "recipe" },
             recipes,
             React.createElement("hr", null),
-            React.createElement(RecipeForm, null)
+            React.createElement(RecipeForm, { addRecipeToList: this.addRecipe })
         );
     }
 });

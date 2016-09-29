@@ -16,12 +16,27 @@ const RecipeForm = React.createClass({
 
         this.setState({ingredients: ingredients, newIngredient: ""});
     },
+    addStep(e){
+        let steps = this
+            .state
+            .steps
+            .concat([this.state.newStep]);
+        this.setState({steps: steps, newStep:""});
+    },
+    addRecipe(e){
+        console.log("button clicked");
+        let recipe = this.state;
+        this.setState({title:"", description:""})
+        this.props.addRecipeToList(recipe);
+    },
     changeNewIngredientText(e) {
         this.setState({newIngredient: e.target.value});
     },
+    changeNewStepText (e) {
+        this.setState({newStep: e.target.value});
+    },
     render() {
         let newTitleText = `New Recipe: ${this.state.title || ''} (${this.state.ingredients.length} ingredients, ${this.state.steps.length} steps)`;
-        console.log(this.state);
 
         return (
             <div className="recipe">
@@ -34,8 +49,8 @@ const RecipeForm = React.createClass({
                                 className="form-control"
                                 id="newTitle"
                                 placeholder="New Recipe"
-                                onChange={this.changeTitle}
                                 value={this.state.title}
+                                onChange={this.changeTitle}
                                 type="text"/>
                         </div>
                     </div>
@@ -46,6 +61,7 @@ const RecipeForm = React.createClass({
                                 className="form-control"
                                 id="newDescription"
                                 placeholder="Recipe description"
+                                value={this.state.description}
                                 onChange={this.changeDescription}></textarea>
                         </div>
                     </div>
@@ -73,17 +89,19 @@ const RecipeForm = React.createClass({
                                 className="form-control"
                                 type="text"
                                 id="newIngredientText"
-                                placeholder="New Step Instructions"></textarea>
+                                placeholder="New Step Instructions"
+                                value={this.state.newStep}
+                                onChange={this.changeNewStepText}></textarea>
                         </div>
                     </div>
                     <div className="form-group">
                         <div className="col-sm-offset-3 col-sm-9">
-                            <button className="btn btn-primary" type="button">Add Step</button>
+                            <button className="btn btn-primary" type="button" onClick={this.addStep}>Add Step</button>
                         </div>
                     </div>
                     <div className="form-group">
                         <div className="col-sm-12">
-                            <button type="submit" className="btn btn-default">Add Recipe</button>
+                            <button type="submit" className="btn btn-default" onClick={this.addRecipe}>Add Recipe</button>
                         </div>
                     </div>
                 </div>

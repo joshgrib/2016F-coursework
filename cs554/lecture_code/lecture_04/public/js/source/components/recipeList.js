@@ -3,7 +3,7 @@ const RecipeList = React.createClass({
         return {recipes: []};
     },
     componentDidMount: function () {
-        $.ajax({
+        $.ajax({//the only "line" of jquery
             url: this.props.url,
             dataType: 'json',
             cache: false,
@@ -14,6 +14,10 @@ const RecipeList = React.createClass({
                 console.error(this.props.url, status, err.toString());
             }
         });
+    },
+    addRecipe: function(recipe) {
+        let recipeList = this.state.recipes.concat([recipe]);
+        this.setState({recipes: recipeList});
     },
     render: function () {
         let recipeList = this.state.recipes;
@@ -32,7 +36,7 @@ const RecipeList = React.createClass({
             <div className="recipe">
                 {recipes}
                 <hr />
-                <RecipeForm/>
+                <RecipeForm addRecipeToList={this.addRecipe}/>
             </div>
         );
     }
