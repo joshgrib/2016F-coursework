@@ -83,3 +83,29 @@ they won't match up anymore
 ### Misc notes
 * Check out redux and flux as React architectures
 * Maybe use flow - a static type checker for JS
+
+## Class notes 10-03-16
+
+### Changes to assignment 1
+* You can use or not use pretty much whatever, but you need to make a custom 
+grid and use it somewhere
+    * You can just make a 7 column grid for the calendar and do bootstrap
+    everywhere else
+* You need to:
+    * Make a custom grid that you use somewhere
+    * Make the assignment as described
+* Add a way to get back to the month view from the other view(s)
+* Calendar data can be stored in any way, just a big JSON array of dates and
+events works fine
+
+### Terms
+* A **web role** handles access to data though an API/UI, this is our server
+that takes and handles requests
+* A **worker role** handles computation - these are useful to do heavy
+computing without blocking the server
+
+
+**Note:** just realizing that the reason I keep putting off doing web dev
+homework is probably because I'm doing web development at work all day so then
+I don't want to do it more. Maybe time to start thinking differently or taking
+a new approach
