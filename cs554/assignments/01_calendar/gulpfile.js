@@ -7,6 +7,7 @@ const gulpSASS = require("gulp-sass");
 
 const cssFiles = "./public/css/source/**/*.css";
 const sassFiles = "./public/css/source/sass/**/*.scss";
+const vendorFiles = "./public/js/vendor/*.js";
 
 gulp.task("sass", () => {
     gulp.src(sassFiles)
@@ -23,7 +24,14 @@ gulp.task("css", () => {
         .pipe(autoPrefix())
         .pipe(cleanCSS())
         .pipe(gulp.dest("./public/css/"));
-})
+});
+
+gulp.task("vendor", () => {
+    return gulp
+        .src(vendorFiles)
+        .pipe(concatenate("vendor.js"))
+        .pipe(gulp.dest("./public/js/"));
+});
 
 gulp.task("watch", () => {
     gulp.watch(cssFiles, ["css"]);
