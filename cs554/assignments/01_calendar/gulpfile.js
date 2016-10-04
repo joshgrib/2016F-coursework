@@ -36,6 +36,7 @@ gulp.task("vendor", () => {
 gulp.task("watch", () => {
     gulp.watch(cssFiles, ["css"]);
     gulp.watch(sassFiles, ["sass"]);
+    gulp.watch(vendorFiles, ["vendor"]);
 });
 
 gulp.task("default", ["watch"]);

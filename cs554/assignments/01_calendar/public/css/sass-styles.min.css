@@ -8,6 +8,11 @@ img {
   max-width: 100%;
   height: auto !important; }
 
+/*
+.container{
+    width: 100%;//override bootstrap
+}
+ */
 .calContainer {
   width: 100%;
   margin: 0 auto; }
@@ -22,13 +27,10 @@ img {
   float: left;
   padding: 0;
   width: 100%;
-  min-height: 1px;
-  border: 1px black solid;
-  padding: 5px; }
+  min-height: 1px; }
 
 .calContainer {
-  width: 95%;
-  max-width: 65em; }
+  width: 100%; }
 
 .calCol-1 {
   width: 14.28571%; }
@@ -51,17 +53,24 @@ img {
 .calCol-7 {
   width: 100%; }
 
-#monthContainer .dayContainer span.day-of-week {
-  display: none; }
+#monthContainer .dayTitleContainer div {
+  font-size: 1.2em;
+  padding: 0 5px; }
 
-#monthContainer .dayContainer span.month {
-  display: none; }
-
-#monthContainer .dayContainer span.numberDay {
-  font-weight: bold; }
-
-#monthContainer .dayContainer ul {
-  background-color: tan; }
+#monthContainer .dayContainer .dayContent {
+  background-color: lightblue;
+  padding: 5px;
+  margin: 2px; }
+  #monthContainer .dayContainer .dayContent header p {
+    margin: 0; }
+    #monthContainer .dayContainer .dayContent header p span {
+      padding: 0;
+      font-size: 1.5em; }
+  #monthContainer .dayContainer .dayContent ul {
+    list-style: none;
+    margin: 0; }
+    #monthContainer .dayContainer .dayContent ul li {
+      padding-left: 5px; }
 
 @media screen and (max-width: 400px) {
   * {

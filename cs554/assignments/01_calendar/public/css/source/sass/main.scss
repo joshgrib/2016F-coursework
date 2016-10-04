@@ -2,7 +2,6 @@ $break-small: 400px;
 
 // grid variables
 $grid-columns: 7;
-$grid-max-width: 65em;
  
 *, *:after, *:before {
     margin: 0;
@@ -17,7 +16,11 @@ img {
     max-width: 100%;
     height: auto !important; 
     }   
- 
+/*
+.container{
+    width: 100%;//override bootstrap
+}
+ */
 .calContainer {
     width: 100%;
     margin: 0 auto;
@@ -34,14 +37,11 @@ img {
     float: left;
     padding: 0;
     width: 100%;
-    min-height: 1px; 
-    border: 1px black solid;
-    padding: 5px;
+    min-height: 1px;
     }   
  
 .calContainer {      
-    width: 95%;
-    max-width: $grid-max-width;     
+    width: 100%;    
     }
 @for $i from 1 through $grid-columns {      
     .calCol-#{$i} {         
@@ -49,20 +49,33 @@ img {
         }           
     }  
 #monthContainer{
-    .dayContainer{
-        span{
-            &.day-of-week{
-                display:none;
-            }
-            &.month{
-                display: none;
-            }
-            &.numberDay{
-                font-weight: bold;
-            }
+    .dayTitleContainer{
+        div{
+            font-size: 1.2em;
+            padding: 0 5px;
         }
-        ul{
-            background-color: tan;
+    }
+    .dayContainer{
+        .dayContent{
+            background-color: lightblue;
+            padding:5px;
+            margin: 2px;
+            header{
+                p{
+                    margin: 0;
+                    span{
+                        padding: 0;
+                        font-size: 1.5em;
+                    }
+                }
+            }
+            ul{
+                list-style: none;
+                margin: 0;
+                li{
+                    padding-left: 5px;
+                }
+            }
         }
     }
 }
