@@ -1,0 +1,28 @@
+<div class="calContainer" id="monthContainer">
+    <header class="calRow">
+        {{#times 7}}
+        <div class="calCol-1">Day Title</div>
+        {{/times}}
+    </header>
+    {{#times 5}}
+    <div class="calRow">
+        {{#times 7}}
+        <div class="dayContainer calCol-1">
+            <header>
+                <p>
+                    <span class="day-of-week">DayOfWeek</span>
+                    <span class="month">Month</span>
+                    <span class="numberDay">##</span>
+                </p>
+            </header>
+            <ul class="eventList">
+                <li>Item 1</li>
+                <li>Item 2</li>
+                <li>Item 3</li>
+            </ul>
+        </div>
+        {{/times}}
+    </div>
+    {{/times}}
+    <!--Create week boxes, then day boxes using custom grid-->
+</div>

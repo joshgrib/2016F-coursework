@@ -1,0 +1,68 @@
+*, *:after, *:before {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box; }
+
+img {
+  width: auto;
+  max-width: 100%;
+  height: auto !important; }
+
+.calContainer {
+  width: 100%;
+  margin: 0 auto; }
+
+.calContainer:after,
+.calRow:after {
+  content: "";
+  display: table;
+  clear: both; }
+
+[class*='calCol-'] {
+  float: left;
+  padding: 0;
+  width: 100%;
+  min-height: 1px;
+  border: 1px black solid;
+  padding: 5px; }
+
+.calContainer {
+  width: 95%;
+  max-width: 65em; }
+
+.calCol-1 {
+  width: 14.28571%; }
+
+.calCol-2 {
+  width: 28.57143%; }
+
+.calCol-3 {
+  width: 42.85714%; }
+
+.calCol-4 {
+  width: 57.14286%; }
+
+.calCol-5 {
+  width: 71.42857%; }
+
+.calCol-6 {
+  width: 85.71429%; }
+
+.calCol-7 {
+  width: 100%; }
+
+#monthContainer .dayContainer span.day-of-week {
+  display: none; }
+
+#monthContainer .dayContainer span.month {
+  display: none; }
+
+#monthContainer .dayContainer span.numberDay {
+  font-weight: bold; }
+
+#monthContainer .dayContainer ul {
+  background-color: tan; }
+
+@media screen and (max-width: 400px) {
+  * {
+    color: blue; } }

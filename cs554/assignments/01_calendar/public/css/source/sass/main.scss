@@ -1,0 +1,73 @@
+$break-small: 400px;
+
+// grid variables
+$grid-columns: 7;
+$grid-max-width: 65em;
+ 
+*, *:after, *:before {
+    margin: 0;
+    padding: 0;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box; 
+    }
+     
+img {
+    width: auto;
+    max-width: 100%;
+    height: auto !important; 
+    }   
+ 
+.calContainer {
+    width: 100%;
+    margin: 0 auto;
+    }
+ 
+.calContainer:after,
+.calRow:after {
+      content: "";
+      display: table;
+      clear: both; 
+      }
+
+[class*='calCol-'] {
+    float: left;
+    padding: 0;
+    width: 100%;
+    min-height: 1px; 
+    border: 1px black solid;
+    padding: 5px;
+    }   
+ 
+.calContainer {      
+    width: 95%;
+    max-width: $grid-max-width;     
+    }
+@for $i from 1 through $grid-columns {      
+    .calCol-#{$i} {         
+        width: 100% / $grid-columns * $i;   
+        }           
+    }  
+#monthContainer{
+    .dayContainer{
+        span{
+            &.day-of-week{
+                display:none;
+            }
+            &.month{
+                display: none;
+            }
+            &.numberDay{
+                font-weight: bold;
+            }
+        }
+        ul{
+            background-color: tan;
+        }
+    }
+}
+@media screen and (max-width: $break-small) {
+    *{
+        color: blue;
+    }
+    }
