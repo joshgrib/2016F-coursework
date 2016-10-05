@@ -1,9 +1,23 @@
 <div class="calContainer" id="monthContainer">
+    <section id="month-nav" class="calCol-4">
+        <a href="#">
+            <span class="glyphicon glyphicon-triangle-left"></span>
+        </a>
+        {{ month }}
+        <a href="#">
+            <span class="glyphicon glyphicon-triangle-right"></span>
+        </a>
+    </section>
+    <span class="calCol-1"></span>
+    <section id='addEventButton' class="calCol-2">
+        Add Event
+    </section>
     <header class="calRow dayTitleContainer hidden-sm-down">
-        <div class="calCol-7">{{ month }}</div>
-        {{#times 7}}
-        <div class="calCol-1">Day Title</div>
-        {{/times}}
+        {{#each weekDays}}
+        <div class="calCol-1">{{this}}</div>
+        {{else}}
+        <div class="bg-danger calCol-7">Problem getting days of week</div>
+        {{/each}}
     </header>
     {{#times 5}}
     <div class="calRow">
@@ -12,15 +26,15 @@
             <div class="dayContent">
                 <header>
                     <p class="row">
-                        <span class="hidden-sm">DayOfWeek</span>
-                        <span class="hidden-sm">{{ month }}</span>
-                        <span class="col-xs-12">##</span>
+                        <span class="dayLabel">DayOfWeek</span>
+                        <span class="monthLabel">{{ month }}</span>
+                        <span class="numDayLabel col-xs-12">##</span>
                     </p>
                 </header>
-                <ul class="row">
-                    <li class="col-xs-12">Item 1</li>
-                    <li class="col-xs-12">Item 2</li>
-                    <li class="col-xs-12">Item 3</li>
+                <ul class="row list-group">
+                    <li class="col-xs-12 list-group-item">Item 1</li>
+                    <li class="col-xs-12 list-group-item">Item 2 is kinda long compared to the others</li>
+                    <li class="col-xs-12 list-group-item">Item 3</li>
                 </ul>
             </div>
         </div>

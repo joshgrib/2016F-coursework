@@ -39,4 +39,4 @@ gulp.task("watch", () => {
     gulp.watch(vendorFiles, ["vendor"]);
 });
 
-gulp.task("default", ["watch"]);
+gulp.task("default", ["css", "sass", "vendor", "watch"]);
