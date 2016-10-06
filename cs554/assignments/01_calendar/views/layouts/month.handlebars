@@ -1,17 +1,15 @@
 <div class="calContainer" id="monthContainer">
-    <section id="month-nav" class="calCol-4">
-        <a href="#">
-            <span class="glyphicon glyphicon-triangle-left"></span>
-        </a>
+    <section id="month-nav" class="calCol-3 text-center">
+        <a href="#"><</a>
         {{ month }}
-        <a href="#">
-            <span class="glyphicon glyphicon-triangle-right"></span>
-        </a>
+        <a href="#">></a>
     </section>
-    <span class="calCol-1"></span>
-    <section id='addEventButton' class="calCol-2">
-        Add Event
-    </section>
+    <span class="calCol-2"></span>
+    <a href="">
+        <section id='addEventButton' class="calCol-2 text-center">
+            Add Event
+        </section>
+    </a>
     <header class="calRow dayTitleContainer hidden-sm-down">
         {{#each weekDays}}
         <div class="calCol-1">{{this}}</div>
@@ -25,10 +23,11 @@
         <div class="dayContainer calCol-1">
             <div class="dayContent">
                 <header>
-                    <p class="row">
-                        <span class="dayLabel">DayOfWeek</span>
-                        <span class="monthLabel">{{ month }}</span>
-                        <span class="numDayLabel col-xs-12">##</span>
+                    <p class="desktopDateFormat">
+                        ##
+                    </p>
+                    <p class="mobileDateFormat">
+                        DayOfWeek, Month ##
                     </p>
                 </header>
                 <ul class="row list-group">
