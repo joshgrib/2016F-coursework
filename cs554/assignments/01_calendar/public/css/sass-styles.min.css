@@ -4,16 +4,9 @@
   padding: 0;
   box-sizing: border-box; }
 
-img {
-  width: auto;
-  max-width: 100%;
-  height: auto !important; }
+body {
+  background-color: #BBDEFB; }
 
-/*
-.container{
-    width: 100%;//override bootstrap
-}
-*/
 .calContainer {
   width: 100%;
   margin: 0 auto; }
@@ -52,8 +45,42 @@ img {
   width: 100%; }
 
 body > div.container {
-  width: 100%;
-  padding: 25px; }
+  width: 100%; }
+
+a:link, a:visited {
+  color: #212121; }
+  a:link:hover, a:link:active, a:visited:hover, a:visited:active {
+    color: #757575; }
+
+#dayNav {
+  position: fixed;
+  bottom: 0; }
+  #dayNav li {
+    height: 100px;
+    position: relative; }
+    @media screen and (max-width: 750px) {
+      #dayNav li {
+        height: 50px; } }
+    #dayNav li p {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      -webkit-transform: translate(-50%, -50%);
+              transform: translate(-50%, -50%); }
+
+@media screen and (max-width: 750px) {
+  #dayPerspective {
+    position: fixed;
+    bottom: 50px; } }
+
+#month-nav {
+  position: relative; }
+  #month-nav #navContainer {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    -webkit-transform: translate(-50%, -50%);
+            transform: translate(-50%, -50%); }
 
 #addEventButton, #month-nav {
   background-color: #FF9800;
@@ -62,39 +89,73 @@ body > div.container {
   font-size: 1.5em;
   margin: auto; }
 
-#monthContainer .dayTitleContainer div {
+#addEventButton {
+  position: relative;
+  overflow: nowrap; }
+  #addEventButton p {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    -webkit-transform: translate(-50%, -50%);
+            transform: translate(-50%, -50%); }
+
+@media screen and (max-width: 750px) {
+  #monthView #month-nav, #monthView #addEventButton {
+    position: fixed;
+    z-index: 1; }
+  #monthView #month-nav {
+    bottom: 0; }
+  #monthView #addEventButton {
+    bottom: 40px; } }
+
+.dayTitleContainer div {
   font-size: 1.2em;
   padding: 0 5px; }
 
-#monthContainer .dayContainer .dayContent {
-  background-color: #2196F3;
-  color: #FFFFFF;
+.calContainer .dayContent {
   margin: 2px; }
-  #monthContainer .dayContainer .dayContent header {
+
+.calendarViewport {
+  overflow: scroll; }
+
+#eventWrapper {
+  background-color: #2196F3; }
+  #eventWrapper header {
+    background-color: #1976D2; }
+
+.dayContent {
+  background-color: #2196F3;
+  color: #FFFFFF; }
+  .dayContent header {
     background-color: #1976D2;
     padding: 5px; }
-    #monthContainer .dayContainer .dayContent header p {
+    .dayContent header p {
       margin: 0;
       padding: 0;
       font-size: 1.5em;
       height: 1.1em; }
-      #monthContainer .dayContainer .dayContent header p.mobileDateFormat {
+      .dayContent header p.mobileDateFormat {
         display: none; }
-      #monthContainer .dayContainer .dayContent header p.desktopDateFormt {
+      .dayContent header p.desktopDateFormt {
         display: inline-block; }
       @media screen and (max-width: 750px) {
-        #monthContainer .dayContainer .dayContent header p.mobileDateFormat {
+        .dayContent header p.mobileDateFormat {
           display: inline-block; }
-        #monthContainer .dayContainer .dayContent header p.desktopDateFormat {
+        .dayContent header p.desktopDateFormat {
           display: none; } }
-  #monthContainer .dayContainer .dayContent ul {
+  .dayContent ul {
     list-style-position: inside;
     margin: 5px 5px; }
-    #monthContainer .dayContainer .dayContent ul li {
+    .dayContent ul li {
       padding-left: 5px; }
-      #monthContainer .dayContainer .dayContent ul li.list-group-item {
+      .dayContent ul li.list-group-item {
         background-color: #2196F3;
         color: #FFFFFF; }
+      @media screen and (min-width: 750px) {
+        .dayContent ul li {
+          overflow: hidden;
+          white-space: nowrap;
+          text-overflow: ellipsis; } }
 
 @media screen and (max-width: 750px) {
   .calCol-1 {

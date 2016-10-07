@@ -12,6 +12,13 @@ $accent-color:         #FF9800;
 $primary-text-color:   #212121;
 $secondary-text-color: #757575;
 $divider-color:        #BDBDBD;
+
+@mixin centerer {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
  
 *, *:after, *:before {
     margin: 0;
@@ -20,17 +27,9 @@ $divider-color:        #BDBDBD;
     -moz-box-sizing: border-box;
     box-sizing: border-box; 
 }
-     
-img {
-    width: auto;
-    max-width: 100%;
-    height: auto !important; 
-}   
-/*
-.container{
-    width: 100%;//override bootstrap
-}
-*/
+body{
+    background-color: $primary-color-light;
+} 
 .calContainer {
     width: 100%;
     margin: 0 auto;
@@ -49,6 +48,7 @@ img {
     width: 100%;
     min-height: 1px;
 }   
+
 @for $i from 1 through $grid-columns {      
     .calCol-#{$i} {         
         width: 100% / $grid-columns * $i;   
@@ -56,61 +56,130 @@ img {
 }  
 body>div.container{
     width: 100%;
-    padding: 25px;
+}
+a:link, a:visited{
+    color: $primary-text-color;
+    &:hover, &:active{
+        color: $secondary-text-color;
+    }
+}
+$navHeight: 100px;
+#dayNav{
+    position: fixed;
+    bottom:0;
+    li{
+        height: $navHeight;
+        @media screen and (max-width: $break-small){
+            height: $navHeight/2;
+        }
+        position: relative;
+        p{
+            @include centerer;
+        }
+    }
+}
+#dayPerspective{
+    @media screen and (max-width: $break-small){
+        position: fixed;
+        bottom: $navHeight/2;
+    }
+}
+$month-nav-height: 40px;
+#month-nav{
+    position: relative;
+    #navContainer{
+        @include centerer;
+    }
 }
 #addEventButton, #month-nav{
     background-color: $accent-color;
     color: $primary-text-color;
-    height: 40px;
+    height: $month-nav-height;
     font-size: 1.5em;
     margin:auto;
 }
-#monthContainer{
-    .dayTitleContainer{
-        div{
-            font-size: 1.2em;
-            padding: 0 5px;
+#addEventButton{
+    position: relative;
+    overflow: nowrap;
+    p{
+        @include centerer;
+    }
+}
+@media screen and (max-width: $break-small){
+    #monthView{
+        #month-nav, #addEventButton{
+            position: fixed;
+            z-index: 1;
+        }
+        #month-nav{
+            bottom: 0;
+        }
+        #addEventButton{
+            bottom: $month-nav-height;
         }
     }
-    .dayContainer{
-        .dayContent{
-            background-color: $primary-color;
-            color: $primary-color-text;
-            margin: 2px;
-            header{
-                background-color: $primary-color-dark;
-                padding: 5px;
-                p{
-                    margin: 0;
-                    padding: 0;
-                    font-size: 1.5em;
-                    height: 1.1em;
-                    &.mobileDateFormat{
-                        display:none;
-                    }
-                    &.desktopDateFormt{
-                        display: inline-block;
-                    }
-                    @media screen and (max-width: $break-small){
-                        &.mobileDateFormat{
-                            display: inline-block;
-                        }
-                        &.desktopDateFormat{
-                            display:none;
-                        }
-                    }
+}
+.dayTitleContainer{
+    div{
+        font-size: 1.2em;
+        padding: 0 5px;
+    }
+}
+.calContainer{
+    .dayContent{
+        margin: 2px;
+    }
+}
+.calendarViewport{
+    overflow: scroll;
+    
+}
+#eventWrapper{
+    background-color: $primary-color;
+    header{
+        background-color: $primary-color-dark;
+    }
+}
+.dayContent{
+    background-color: $primary-color;
+    color: $primary-color-text;
+    header{
+        background-color: $primary-color-dark;
+        padding: 5px;
+        p{
+            margin: 0;
+            padding: 0;
+            font-size: 1.5em;
+            height: 1.1em;
+            &.mobileDateFormat{
+                display:none;
+            }
+            &.desktopDateFormt{
+                display: inline-block;
+            }
+            @media screen and (max-width: $break-small){
+                &.mobileDateFormat{
+                    display: inline-block;
+                }
+                &.desktopDateFormat{
+                    display:none;
                 }
             }
-            ul{
-                list-style-position: inside;
-                margin: 5px 5px;
-                li{
-                    padding-left: 5px;
-                    &.list-group-item{
-                        background-color: $primary-color;
-                        color: $primary-color-text;
-                    }
-                }
+        }
+    }
+    ul{
+        list-style-position: inside;
+        margin: 5px 5px;
+        li{
+            padding-left: 5px;
+            &.list-group-item{
+                background-color: $primary-color;
+                color: $primary-color-text;
+            }
+            @media screen and (min-width: $break-small){
+                overflow: hidden;
+                white-space: nowrap;
+                text-overflow: ellipsis;
             }
         }
     }

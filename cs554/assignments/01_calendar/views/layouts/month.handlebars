@@ -1,13 +1,15 @@
-<div class="calContainer" id="monthContainer">
-    <section id="month-nav" class="calCol-3 text-center">
-        <a href="#"><</a>
-        {{ month }}
-        <a href="#">></a>
-    </section>
+<div id="monthView">
+    <nav id="month-nav" class="calCol-3 text-center">
+        <span id="navContainer">
+            <a href="#"><</a>
+            {{ month }}
+            <a href="#">></a>
+        </span>
+    </nav>
     <span class="calCol-2"></span>
-    <a href="">
+    <a href="/day">
         <section id='addEventButton' class="calCol-2 text-center">
-            Add Event
+            <p>Add Event</p>
         </section>
     </a>
     <header class="calRow dayTitleContainer hidden-sm-down">
@@ -17,28 +19,40 @@
         <div class="bg-danger calCol-7">Problem getting days of week</div>
         {{/each}}
     </header>
-    {{#times 5}}
-    <div class="calRow">
-        {{#times 7}}
-        <div class="dayContainer calCol-1">
-            <div class="dayContent">
-                <header>
-                    <p class="desktopDateFormat">
-                        ##
-                    </p>
-                    <p class="mobileDateFormat">
-                        DayOfWeek, Month ##
-                    </p>
-                </header>
-                <ul class="row list-group">
-                    <li class="col-xs-12 list-group-item">Item 1</li>
-                    <li class="col-xs-12 list-group-item">Item 2 is kinda long compared to the others</li>
-                    <li class="col-xs-12 list-group-item">Item 3</li>
-                </ul>
+    <div class="calContainer" id="monthContainer">
+        <section id="calendarViewport">
+            <!--
+                Maybe loop by number of days, set the left margin thing for the
+                first, then loop until the end of the month and it should auto-wrap
+                each 7
+            -->
+            <div class="calRow">
+                {{#times 30}}
+                <div class="dayContainer calCol-1">
+                    <div class="dayContent">
+                        <header>
+                            <p class="desktopDateFormat">
+                                ##
+                            </p>
+                            <p class="mobileDateFormat">
+                                DayOfWeek, Month ##
+                            </p>
+                        </header>
+                        <ul class="row list-group">
+                            <li class="col-xs-12 list-group-item">
+                                <a href="/event">Item 1</a>
+                            </li>
+                            <li class="col-xs-12 list-group-item">
+                                <a href="/event">Item 2 is kinda long compared to the others</a>
+                            </li>
+                            <li class="col-xs-12 list-group-item">
+                                <a href="/event">Item 3</a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                {{/times}}
             </div>
-        </div>
-        {{/times}}
+        </section>
     </div>
-    {{/times}}
-    <!--Create week boxes, then day boxes using custom grid-->
 </div>
