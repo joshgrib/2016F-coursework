@@ -83,7 +83,7 @@ a:link, a:visited {
             transform: translate(-50%, -50%); }
 
 #addEventButton, #month-nav {
-  background-color: #FF9800;
+  background-color: #FFC107;
   color: #212121;
   height: 40px;
   font-size: 1.5em;
@@ -121,6 +121,7 @@ a:link, a:visited {
 #eventWrapper {
   background-color: #2196F3; }
   #eventWrapper header {
+    color: white;
     background-color: #1976D2; }
 
 .dayContent {

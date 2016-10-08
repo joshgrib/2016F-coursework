@@ -8,7 +8,7 @@ $primary-color-dark:   #1976D2;
 $primary-color:        #2196F3;
 $primary-color-light:  #BBDEFB;
 $primary-color-text:   #FFFFFF;
-$accent-color:         #FF9800;
+$accent-color:         #FFC107;
 $primary-text-color:   #212121;
 $secondary-text-color: #757575;
 $divider-color:        #BDBDBD;
@@ -137,6 +137,7 @@ $month-nav-height: 40px;
 #eventWrapper{
     background-color: $primary-color;
     header{
+        color: white;
         background-color: $primary-color-dark;
     }
 }

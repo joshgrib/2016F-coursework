@@ -28,6 +28,9 @@ const handlebarsInstance = exphbs.create({
             for(var i = from; i < to; i += incr)
                 accum += block.fn(i);
             return accum;
+        },
+        addOne: (obj) => {
+            return obj+1;
         }
     },
     partialsDir: ['views/partials/']

@@ -27,12 +27,12 @@
                 each 7
             -->
             <div class="calRow">
-                {{#times 30}}
+                {{#times dayCount}}
                 <div class="dayContainer calCol-1">
                     <div class="dayContent">
                         <header>
                             <p class="desktopDateFormat">
-                                ##
+                                {{addOne this }}
                             </p>
                             <p class="mobileDateFormat">
                                 DayOfWeek, Month ##
