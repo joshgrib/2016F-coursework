@@ -57,7 +57,8 @@ a:link, a:visited {
   bottom: 0; }
   #dayNav li {
     height: 100px;
-    position: relative; }
+    position: relative;
+    background-color: #2196F3; }
     @media screen and (max-width: 750px) {
       #dayNav li {
         height: 50px; } }
@@ -67,6 +68,10 @@ a:link, a:visited {
       left: 50%;
       -webkit-transform: translate(-50%, -50%);
               transform: translate(-50%, -50%); }
+    #dayNav li#currDay {
+      background-color: #1976D2; }
+    #dayNav li.navArrow {
+      background-color: #FFC107; }
 
 @media screen and (max-width: 750px) {
   #dayPerspective {
@@ -124,6 +129,15 @@ a:link, a:visited {
     color: white;
     background-color: #1976D2; }
 
+#monthView .dayContent a {
+  text-decoration: none; }
+
+#monthView .dayContent header:hover {
+  background-color: #2196F3; }
+
+#monthView .dayContent ul li:hover {
+  background-color: #1976D2; }
+
 .dayContent {
   background-color: #2196F3;
   color: #FFFFFF; }
@@ -147,6 +161,10 @@ a:link, a:visited {
   .dayContent ul {
     list-style-position: inside;
     margin: 5px 5px; }
+    @media screen and (min-width: 750px) {
+      .dayContent ul {
+        height: 100px;
+        overflow: hidden; } }
     .dayContent ul li {
       padding-left: 5px; }
       .dayContent ul li.list-group-item {

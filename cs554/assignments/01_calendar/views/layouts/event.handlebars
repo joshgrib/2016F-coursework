@@ -1,6 +1,13 @@
 <section id="eventWrapper" class="col-xs-12 col-sm-6">
-    <header>Event Name</header>
-    <p>Date</p>
-    <p>Location</p>
-    <p>Description</p>
+    {{#if (hasContent eventData)}}
+    <header>{{eventData.title}}</header>
+    <a href="/{{yearNum}}/{{monthNum}}/{{dayNum}}">
+        <p>{{monthNum}}/{{dayNum}}/{{yearNum}}</p>
+    </a>
+    <p>{{eventData.location}}</p>
+    <p>{{eventData.desc}}</p>
+    {{else}}
+    <header>No event here yet!</header>
+    <p>You should figure out what to do with your life on {{monthName}} {{dayNum}}, {{yearNum}}</p>
+    {{/if}}
 </section>

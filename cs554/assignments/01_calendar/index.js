@@ -7,6 +7,10 @@ const configRoutes = require("./routes");
 const exphbs = require('express-handlebars');
 const Handlebars = require('handlebars');
 
+Handlebars.registerHelper("math", function(lvalue, operator, rvalue, options) {
+    
+});
+
 const handlebarsInstance = exphbs.create({
     defaultLayout: 'main',
     // Specify helpers which are only registered on this instance.
@@ -31,6 +35,24 @@ const handlebarsInstance = exphbs.create({
         },
         addOne: (obj) => {
             return obj+1;
+        },
+        math: (lvalue, operator, rvalue, options) => {
+            lvalue = parseFloat(lvalue);
+            rvalue = parseFloat(rvalue);
+            return {
+                "+": lvalue + rvalue,
+                "-": lvalue - rvalue,
+                "*": lvalue * rvalue,
+                "/": lvalue / rvalue,
+                "%": lvalue % rvalue
+            }[operator];
+        },
+        indexOf: (obj,i) => {
+            return obj[i];
+        },
+        hasContent: (obj) => {
+            let contentSize = Object.keys(obj).length;
+            return contentSize > 0;
         }
     },
     partialsDir: ['views/partials/']

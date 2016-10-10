@@ -1,13 +1,13 @@
 <div id="monthView">
     <nav id="month-nav" class="calCol-3 text-center">
         <span id="navContainer">
-            <a href="#"><</a>
+            <a href="/{{yearNum}}/{{monthNum}}"><</a>
             {{ month }}
-            <a href="#">></a>
+            <a href="/{{yearNum}}/{{math monthNum '+' 2}}">></a>
         </span>
     </nav>
     <span class="calCol-2"></span>
-    <a href="/day">
+    <a href="/addEvent">
         <section id='addEventButton' class="calCol-2 text-center">
             <p>Add Event</p>
         </section>
@@ -20,6 +20,9 @@
         {{/each}}
     </header>
     <div class="calContainer" id="monthContainer">
+        <!--
+            Something like if(this.events){class = hidden-sm}
+            -->
         <section id="calendarViewport">
             <!--
                 Maybe loop by number of days, set the left margin thing for the
@@ -33,19 +36,23 @@
                 {{#each monthData}}
                 <div class="dayContainer calCol-1" id="day_{{../yearNum}}_{{addOne ../monthNum}}_{{addOne @index}}">
                     <div class="dayContent">
-                        <header>
-                            <p class="desktopDateFormat">
-                                {{addOne @index}}
-                            </p>
-                            <p class="mobileDateFormat">
-                                DayOfWeek, {{ ../month }} {{addOne @index}}
-                            </p>
-                        </header>
+                        <a href="/{{../yearNum}}/{{addOne ../monthNum}}/{{addOne @index}}">
+                            <header>
+                                <p class="desktopDateFormat">
+                                    {{addOne @index}}
+                                </p>
+                                <p class="mobileDateFormat">
+                                    {{indexOf ../weekDays (math (math @index "+" 6) "%" 7)}}, {{ ../month }} {{addOne @index}}
+                                </p>
+                            </header>
+                        </a>
                         <ul class="row list-group">
                             {{#each this}}
-                            <li class="col-xs-12 list-group-item">
-                                <a href="/{{../../yearNum}}/{{addOne ../../monthNum}}/{{addOne @../index}}/{{@index}}">{{this.title}}</a>
-                            </li>
+                            <a href="/{{../../yearNum}}/{{addOne ../../monthNum}}/{{addOne @../index}}/{{@index}}">
+                                <li class="col-xs-12 list-group-item">
+                                    {{this.title}}
+                                </li>
+                            </a>
                             {{/each}}
                         </ul>
                     </div>

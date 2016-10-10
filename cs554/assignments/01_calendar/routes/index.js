@@ -19,6 +19,7 @@ const constructorMethod = (app) => {
         let weekDayNum = new Date(year, month, 1).getDay();
 
         let monthData = data.getMonth(req.params.year, req.params.month);
+        console.log(monthData);
         for(let i=1; i<=dayCount; i++){
             //populate blank days
             let thisData = monthData[i];
@@ -61,13 +62,16 @@ const constructorMethod = (app) => {
         let dayData = data.getDay(req.params.year, req.params.month, req.params.day);
 
         res.render("layouts/day", {
+            yearNum: year,
+            monthNum: month,
             month: monthName,
             weekDayNum: weekDayNum,
             monthDayNum: monthDayNum,
             dayName: dayName,
             startDiff: yearStartDiffCount,
-            endDiff: yearEndDiffCount
-        })
+            endDiff: yearEndDiffCount,
+            events: dayData
+        });
     });
 
     app.get("/:year/:month/:day/:eventID", (req, res) => {
@@ -77,12 +81,30 @@ const constructorMethod = (app) => {
         let eventID = req.params.eventID;
 
         let eventData = data.getEvent(req.params.year, req.params.month, req.params.day, req.params.eventID);
-        res.json(eventData);
+        res.render("layouts/event", {
+            yearNum: req.params.year,
+            monthNum: req.params.month,
+            dayNum: req.params.day,
+            eventNum: req.params.eventID,
+            monthName: monthNames[month],
+            eventData: eventData
+        });
+    });
+
+    app.get("/addEvent", (req, res) => {
+        res.render("layouts/form", {});
+    });
+
+    app.get("/home", (req, res) => {
+        let d = new Date();
+        let year = d.getFullYear();
+        let month = d.getMonth() + 1;
+        res.redirect('/' + year + '/' + month);
     });
     
     app.use("*", (req, res) => {
         res.sendStatus(404);
-    })
+    });
 };
 
 module.exports = constructorMethod;

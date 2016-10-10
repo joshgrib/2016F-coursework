@@ -76,6 +76,13 @@ $navHeight: 100px;
         p{
             @include centerer;
         }
+        background-color: $primary-color;
+        &#currDay{
+            background-color: $primary-color-dark;
+        }
+        &.navArrow{
+            background-color: $accent-color;
+        }
     }
 }
 #dayPerspective{
@@ -141,9 +148,23 @@ $month-nav-height: 40px;
         background-color: $primary-color-dark;
     }
 }
+#monthView{
+    .dayContent{
+        a{
+            text-decoration: none;
+        }
+        header:hover{
+            background-color: $primary-color;
+        }
+        ul li:hover{
+            background-color: $primary-color-dark;
+        }
+    }
+}
 .dayContent{
     background-color: $primary-color;
     color: $primary-color-text;
+    
     header{
         background-color: $primary-color-dark;
         padding: 5px;
@@ -171,6 +192,10 @@ $month-nav-height: 40px;
     ul{
         list-style-position: inside;
         margin: 5px 5px;
+        @media screen and (min-width: $break-small){
+            height: 100px;
+            overflow: hidden;
+        }
         li{
             padding-left: 5px;
             &.list-group-item{

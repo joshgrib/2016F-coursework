@@ -6,13 +6,17 @@
         </header>
         <section id="eventList" class="col-xs-12">
             <ul>
-                <li>Event</li>
-                <li>Event</li>
-                <li>Event</li>
+                {{#each events}}
+                <a href="/{{../yearNum}}/{{addOne ../monthNum}}/{{../monthDayNum}}/{{@index}}">
+                    <li>{{this.title}}</li>
+                </a>
+                {{else}}
+                    <li>No events for this day yet!</li>
+                {{/each}}
             </ul>
         </section>
     </section>
-    <a href="/">
+    <a href="/addEvent">
         <section id='addEventButton' class="col-xs-4 col-sm-6 text-center">
             <p>Add Event</p>
         </section>
@@ -24,26 +28,38 @@
 </article>
 <nav id="dayNav" class="col-xs-12 noPadding">
     <ul class="list-group">
-        <li class="col-sm-1 list-group-item text-center col-xs-1">
-            <a href="#"><p><</p></a>
+        <a href="/{{yearNum}}/{{addOne monthNum}}/{{math monthDayNum "-" 1}}">
+            <li class="navArrow col-sm-1 list-group-item text-center col-xs-1">
+                <p><</p>
+            </li>
+        </a>
+        <a href="/{{yearNum}}/{{addOne monthNum}}/{{math monthDayNum "-" 2}}">
+            <li class="col-sm-2 list-group-item text-center hidden-xs">
+                <p>{{addOne monthNum}}/{{math monthDayNum "-" 2}}</p>
+            </li>
+        </a>
+        <a href="/{{yearNum}}/{{addOne monthNum}}/{{math monthDayNum "-" 1}}">
+            <li class="col-sm-2 list-group-item text-center hidden-xs">
+                <p>{{addOne monthNum}}/{{math monthDayNum "-" 1}}</p>
+            </li>
+        </a>
+        <li class="col-sm-2 col-xs-10 list-group-item text-center" id="currDay">
+            <p>{{addOne monthNum}}/{{monthDayNum}}</p>
         </li>
-        <li class="col-sm-2 list-group-item text-center hidden-xs">
-            <p>10/3</p>
-        </li>
-        <li class="col-sm-2 list-group-item text-center hidden-xs">
-            <p>10/4</p>
-        </li>
-        <li class="col-sm-2 list-group-item text-center col-xs-10 ">
-            <p>10/5</p>
-        </li>
-        <li class="col-sm-2 list-group-item text-center hidden-xs">
-            <p>10/6</p>
-        </li>
-        <li class="col-sm-2 list-group-item text-center hidden-xs">
-            <p>10/7</p>
-        </li>
-        <li class="col-sm-1 list-group-item text-center col-xs-1">
-            <a href="#"><p>></p></a>
-        </li>
+        <a href="/{{yearNum}}/{{addOne monthNum}}/{{math monthDayNum "+" 1}}">
+            <li class="col-sm-2 list-group-item text-center hidden-xs">
+                <p>{{addOne monthNum}}/{{math monthDayNum "+" 1}}</p>
+            </li>
+        </a>
+        <a href="/{{yearNum}}/{{addOne monthNum}}/{{math monthDayNum "+" 2}}">
+            <li class="col-sm-2 list-group-item text-center hidden-xs">
+                <p>{{addOne monthNum}}/{{math monthDayNum "+" 2}}</p>
+            </li>
+        </a>
+        <a href="/{{yearNum}}/{{addOne monthNum}}/{{math monthDayNum "+" 1}}">
+            <li class="navArrow col-sm-1 list-group-item text-center col-xs-1">
+                <p>></p>
+            </li>
+        </a>
     </ul>
 </nav>
