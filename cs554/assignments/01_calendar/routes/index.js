@@ -1,9 +1,9 @@
 const apiRoutes = require("./api");
 
 var monthNames = ["January", "February", "March", "April", "May", "June",
-  "July", "August", "September", "October", "November", "December"
-];
-let weekDays = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday']
+  "July", "August", "September", "October", "November", "December"];
+let weekDays = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 
+'Friday', 'Saturday']
 
 let data = require('../data');
 
@@ -94,6 +94,12 @@ const constructorMethod = (app) => {
     app.get("/addEvent", (req, res) => {
         res.render("layouts/form", {});
     });
+
+    app.post("/addEvent", (req, res) =>{
+        let formData = req.body;
+        console.log("POST to /addEvent:" + formData);
+        //TODO
+    })
 
     app.get("/home", (req, res) => {
         let d = new Date();
