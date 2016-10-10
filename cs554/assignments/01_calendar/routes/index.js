@@ -19,7 +19,6 @@ const constructorMethod = (app) => {
         let weekDayNum = new Date(year, month, 1).getDay();
 
         let monthData = data.getMonth(req.params.year, req.params.month);
-        console.log(monthData);
         for(let i=1; i<=dayCount; i++){
             //populate blank days
             let thisData = monthData[i];
@@ -27,7 +26,6 @@ const constructorMethod = (app) => {
                 monthData[i] = {};
             }
         }
-        console.log(monthData);
 
         res.render("layouts/month", {
             yearNum: year,
