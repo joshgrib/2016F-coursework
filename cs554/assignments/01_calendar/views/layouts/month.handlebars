@@ -27,31 +27,30 @@
                 each 7
             -->
             <div class="calRow">
-                {{#times dayCount}}
-                <div class="dayContainer calCol-1">
+                {{#times weekStartIndentSize}}
+                <div class="calCol-1"></div>
+                {{/times}}
+                {{#each monthData}}
+                <div class="dayContainer calCol-1" id="day_{{../yearNum}}_{{addOne ../monthNum}}_{{addOne @index}}">
                     <div class="dayContent">
                         <header>
                             <p class="desktopDateFormat">
-                                {{addOne this }}
+                                {{addOne @index}}
                             </p>
                             <p class="mobileDateFormat">
-                                DayOfWeek, Month ##
+                                DayOfWeek, {{ ../month }} {{addOne @index}}
                             </p>
                         </header>
                         <ul class="row list-group">
+                            {{#each this}}
                             <li class="col-xs-12 list-group-item">
-                                <a href="/event">Item 1</a>
+                                <a href="/{{../../yearNum}}/{{addOne ../../monthNum}}/{{addOne @../index}}/{{@index}}">{{this.title}}</a>
                             </li>
-                            <li class="col-xs-12 list-group-item">
-                                <a href="/event">Item 2 is kinda long compared to the others</a>
-                            </li>
-                            <li class="col-xs-12 list-group-item">
-                                <a href="/event">Item 3</a>
-                            </li>
+                            {{/each}}
                         </ul>
                     </div>
                 </div>
-                {{/times}}
+                {{/each}}
             </div>
         </section>
     </div>

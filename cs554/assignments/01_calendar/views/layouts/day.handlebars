@@ -1,8 +1,8 @@
 <div id="dayLeftPanel" class="col-xs-12 col-sm-8">
     <section id="dayDetails" class="dayContent col-xs-12">
         <header id="dateTitle" class="col-xs-12">
-            <p>Events for Wednesday,</p>
-            <p>October 5th</p>
+            <p>Events for {{dayName}},</p>
+            <p>{{month}} {{monthDayNum}}</p>
         </header>
         <section id="eventList" class="col-xs-12">
             <ul>
@@ -19,8 +19,8 @@
     </a>
 </div>
 <article id="dayPerspective" class="col-xs-12 col-sm-4">
-    <p>This Wednesday is day ## of the year.</p>
-    <p>There are ## days left in the year.</p>
+    <p>This {{dayName}} is day {{startDiff}} of the year.</p>
+    <p>There are {{endDiff}} days left in the year.</p>
 </article>
 <nav id="dayNav" class="col-xs-12 noPadding">
     <ul class="list-group">
