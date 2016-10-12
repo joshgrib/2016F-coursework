@@ -59,6 +59,9 @@ const constructorMethod = (app) => {
 
         let dayData = data.getDay(req.params.year, req.params.month, req.params.day);
 
+        //FOR TESTNG
+        data.addEvent(year, month+1, day+1, 'Test event', 'Test event location','Test event descrption');
+
         res.render("layouts/day", {
             yearNum: year,
             monthNum: month,

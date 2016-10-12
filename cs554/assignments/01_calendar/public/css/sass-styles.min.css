@@ -78,6 +78,9 @@ a:link, a:visited {
     position: fixed;
     bottom: 50px; } }
 
+#dayDetails header > p > a {
+  color: #FFC107; }
+
 #month-nav {
   position: relative; }
   #month-nav #navContainer {

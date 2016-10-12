@@ -91,6 +91,11 @@ $navHeight: 100px;
         bottom: $navHeight/2;
     }
 }
+#dayDetails{
+    header>p>a{
+        color: $accent-color;
+    }
+}
 $month-nav-height: 40px;
 #month-nav{
     position: relative;

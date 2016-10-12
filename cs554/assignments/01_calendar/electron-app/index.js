@@ -1,4 +1,5 @@
 const electron = require("electron");
+let data = require("../data");
 
 let mainWindow;
 
@@ -17,6 +18,86 @@ const constructorMethod = () => {
     mainWindow = new BrowserWindow({ width: 1200, height: 900 })
 
     mainWindow.loadURL('http://localhost:3000/home');
+
+    const Menu = electron.Menu;
+    const menuTemplate = [
+        {
+            label: 'File',
+            submenu: [
+                {
+                    label: 'Save calendar',
+                    click: () => {
+                        console.log('Time to save a calendar');
+                        data.saveCalToFile("myCalFile.json");
+                        let dialog = app.dialog;
+                        dialog.showSaveDialog( (fileName) => {
+                            if (fileName === undefined){
+                                console.log("You didn't save the file");
+                                return;
+                            }
+                            // fileName is a string that contains the path and filename created in the save file dialog.  
+                            fs.writeFile(fileName, 'test content', function (err) {
+                                if(err){
+                                    alert("An error ocurred creating the file "+ err.message)
+                                }
+                                              
+                                alert("The file has been succesfully saved");
+                            });
+                        });
+                    }
+                }, {
+                    type: 'separator'
+                }, {
+                    label: 'Load calendar',
+                    click: () => {
+                        console.log('Time to load a calendar');
+                        //TODO
+                    }
+                }
+            ]
+        },
+        {
+          label: 'Modes',
+          submenu: [
+              {
+                  label: 'Change To Tablet',
+                  click: () => {
+                      let win = BrowserWindow.getFocusedWindow();
+                      win.setSize(800, 600);
+                  }
+              }, {
+                    type: 'separator'
+              }, {
+                  label: 'Change To Desktop',
+                  click: () => {
+                      let win = BrowserWindow.getFocusedWindow();
+                      win.setSize(1200, 900);
+                  }
+              }, {
+                    type: 'separator'
+              }, {
+                  label: 'Change To Mobile Mode',
+                  click: () => {
+                      let win = BrowserWindow.getFocusedWindow();
+                      win.setSize(400, 600);
+                  }
+              }
+          ]
+        },
+        {
+            label: 'Extra',
+            submenu: [
+                {
+                    label: 'Quit',
+                    click: () => {
+                        app.quit();
+                    }
+                }
+            ]
+        }
+    ];
+    const menu = Menu.buildFromTemplate(menuTemplate);
+    Menu.setApplicationMenu(menu);
 
     // Open the DevTools.
     // mainWindow.webContents.openDevTools({mode: "undocked"});
