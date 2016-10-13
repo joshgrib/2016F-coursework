@@ -64,6 +64,7 @@ module.exports = {
             'location': location,
             'description':description
         }
+        console.log(JSON.stringify(calData, null, 2));
         if(calData[year] === undefined){
             calData[year] = {};
         }
@@ -73,14 +74,17 @@ module.exports = {
         if(calData[year][month][day] === undefined){
             calData[year][month][day] = {};
         }
+        console.log(JSON.stringify(eventObj, null, 2));
         let currentIDs = Object.keys(calData[year][month][day]);
         console.log(currentIDs);
         let intIDs = currentIDs.map(Number);
         console.log(intIDs);
         let idMax = Math.max.apply(null, currentIDs);
         let newID = idMax + 1;
+        if (newID < 0 ){ newID = 0 };
         console.log(newID);
         calData[year][month][day][newID] = eventObj;
+        console.log(JSON.stringify(calData, null, 2));
         //save caldata file
         saveObjToFile(calData);
     },

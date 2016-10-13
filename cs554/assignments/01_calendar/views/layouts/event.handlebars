@@ -4,10 +4,12 @@
     <a href="/{{yearNum}}/{{monthNum}}/{{dayNum}}">
         <p class="calLink">{{monthNum}}/{{dayNum}}/{{yearNum}}</p>
     </a>
-    <p>{{eventData.location}}</p>
-    <p>{{eventData.desc}}</p>
+    <p>Location: {{eventData.location}}</p>
+    <hr/>
+    <p>Details:</p>
+    <p>{{eventData.description}}</p>
     {{else}}
-    <header>No event here yet!</header>
+    <header>No events here yet!</header>
     <p>You should figure out what to do with your life on {{monthName}} {{dayNum}}, {{yearNum}}</p>
     {{/if}}
 </section>

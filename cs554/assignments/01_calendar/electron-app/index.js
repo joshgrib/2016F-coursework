@@ -1,4 +1,5 @@
 const electron = require("electron");
+const {shell} = require("electron");
 let data = require("../data");
 
 let mainWindow;
@@ -37,6 +38,8 @@ const constructorMethod = () => {
                     click: () => {
                         console.log('Time to load a calendar');
                         //TODO
+                        let file = shell.showItemInFolder("~");
+                        console.log(file);
                     }
                 }
             ]
