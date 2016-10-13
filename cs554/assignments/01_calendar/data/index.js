@@ -87,7 +87,7 @@ module.exports = {
     },
     saveCalToFile: () => {
         console.log("Saving the calendar");
-        console.log(calData);
+        //console.log(calData);
         saveObjToFile(calData);
     }
 }

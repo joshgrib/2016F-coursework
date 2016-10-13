@@ -149,9 +149,20 @@ $month-nav-height: 40px;
 }
 #eventWrapper{
     background-color: $primary-color;
+    min-height: 200px;
     header{
         color: white;
         background-color: $primary-color-dark;
+        font-size: 1.5em;
+    }
+}
+#homeButton{
+    a{
+        background-color: $accent-color;
+        height: $month-nav-height;
+        p{
+            @include centerer;
+        }
     }
 }
 #monthView{
@@ -224,5 +235,11 @@ $month-nav-height: 40px;
     }  
     .dayTitleContainer{
         display:none;
+    }
+    .dayContainer[data-childCount="0"]{
+        display:none;
+    }
+    .calContainer{
+        margin-bottom: 2*$month-nav-height;
     }
 }

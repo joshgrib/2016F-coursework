@@ -53,6 +53,13 @@ const handlebarsInstance = exphbs.create({
         hasContent: (obj) => {
             let contentSize = Object.keys(obj).length;
             return contentSize > 0;
+        },
+        childCount: (obj) => {
+            let count = 0;
+            for(let i in obj){
+                count++;
+            }
+            return count;
         }
     },
     partialsDir: ['views/partials/']

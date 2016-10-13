@@ -34,7 +34,7 @@
                 <div class="calCol-1"></div>
                 {{/times}}
                 {{#each monthData}}
-                <div class="dayContainer calCol-1" id="day_{{../yearNum}}_{{addOne ../monthNum}}_{{addOne @index}}">
+                <div class="dayContainer calCol-1" id="day_{{../yearNum}}_{{addOne ../monthNum}}_{{addOne @index}}" data-childCount="{{childCount this}}">
                     <div class="dayContent">
                         <a href="/{{../yearNum}}/{{addOne ../monthNum}}/{{addOne @index}}">
                             <header>

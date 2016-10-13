@@ -128,10 +128,22 @@ a:link, a:visited {
   overflow: scroll; }
 
 #eventWrapper {
-  background-color: #2196F3; }
+  background-color: #2196F3;
+  min-height: 200px; }
   #eventWrapper header {
     color: white;
-    background-color: #1976D2; }
+    background-color: #1976D2;
+    font-size: 1.5em; }
+
+#homeButton a {
+  background-color: #FFC107;
+  height: 40px; }
+  #homeButton a p {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    -webkit-transform: translate(-50%, -50%);
+            transform: translate(-50%, -50%); }
 
 #monthView .dayContent a {
   text-decoration: none; }
@@ -196,4 +208,8 @@ a:link, a:visited {
   .calCol-7 {
     width: 100%; }
   .dayTitleContainer {
-    display: none; } }
+    display: none; }
+  .dayContainer[data-childCount="0"] {
+    display: none; }
+  .calContainer {
+    margin-bottom: 80px; } }
