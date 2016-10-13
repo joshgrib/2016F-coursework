@@ -88,6 +88,7 @@ const constructorMethod = (app) => {
         let jsDate = new Date(year, month, day);
         let weekDayNum = jsDate.getDay() + 1;
         let monthDayNum = jsDate.getDate() + 1;
+        weekDayNum = (weekDayNum + 7) % 7;//fix sundays being 6 instead of 0
         let dayName = weekDays[weekDayNum];
 
         let yearStart = new Date(jsDate.getFullYear(), 0, 0);
