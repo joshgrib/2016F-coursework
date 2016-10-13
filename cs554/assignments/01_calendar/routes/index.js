@@ -17,13 +17,15 @@ const constructorMethod = (app) => {
 
         let dayCount = new Date(year, month, 0).getDate();
         let monthName = monthNames[month-1];
+        let noDayGiven = (dayNum == undefined);
         res.render("layouts/form", {
             year: year,
             month: month,
             monthNames: monthNames,
             dayCount: dayCount,
             monthName: monthName,
-            dayNum: dayNum
+            dayNum: dayNum,
+            noDayGiven: noDayGiven
         });
     });
 

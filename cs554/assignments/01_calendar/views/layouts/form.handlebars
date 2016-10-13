@@ -2,7 +2,9 @@
     <header>
         <span>New Event For {{monthName}}</span>
         <select id="day" name="day">
-            <option>##</option>
+            {{#if noDayGiven}}
+            <option selected disabled="true">##</option>
+            {{/if}}
             {{#times dayCount}}
             <option {{formDayControl ../dayNum (addOne this)}} value="{{addOne this}}">{{addOne this}}</option>
             {{/times}}
