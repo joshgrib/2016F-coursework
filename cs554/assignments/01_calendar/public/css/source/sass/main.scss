@@ -101,6 +101,13 @@ $month-nav-height: 40px;
     position: relative;
     #navContainer{
         @include centerer;
+        width: 100%;
+        #prevMonth{
+            left:0;
+        }
+        #extMonth{
+            right:0
+        }
     }
 }
 #addEventButton, #month-nav{

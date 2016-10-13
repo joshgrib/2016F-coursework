@@ -88,7 +88,12 @@ a:link, a:visited {
     top: 50%;
     left: 50%;
     -webkit-transform: translate(-50%, -50%);
-            transform: translate(-50%, -50%); }
+            transform: translate(-50%, -50%);
+    width: 100%; }
+    #month-nav #navContainer #prevMonth {
+      left: 0; }
+    #month-nav #navContainer #extMonth {
+      right: 0; }
 
 #addEventButton, #month-nav {
   background-color: #FFC107;

@@ -1,9 +1,13 @@
 <div id="monthView">
     <nav id="month-nav" class="calCol-3 text-center">
         <span id="navContainer">
-            <a href="/{{yearNum}}/{{monthNum}}"><</a>
-            {{ month }}
-            <a href="/{{yearNum}}/{{math monthNum '+' 2}}">></a>
+            <div id="prevMonth" class="col-xs-2">
+                <a href="/{{yearNum}}/{{monthNum}}"><</a>
+            </div>
+            <span class="col-xs-8">{{ month }}</span>
+            <div id="nextMonth" class="col-xs-2">
+                <a href="/{{yearNum}}/{{math monthNum '+' 2}}">></a>
+            </div>
         </span>
     </nav>
     <span class="calCol-2"></span>
