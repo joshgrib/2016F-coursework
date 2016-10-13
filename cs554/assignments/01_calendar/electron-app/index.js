@@ -28,22 +28,7 @@ const constructorMethod = () => {
                     label: 'Save calendar',
                     click: () => {
                         console.log('Time to save a calendar');
-                        data.saveCalToFile("myCalFile.json");
-                        let dialog = app.dialog;
-                        dialog.showSaveDialog( (fileName) => {
-                            if (fileName === undefined){
-                                console.log("You didn't save the file");
-                                return;
-                            }
-                            // fileName is a string that contains the path and filename created in the save file dialog.  
-                            fs.writeFile(fileName, 'test content', function (err) {
-                                if(err){
-                                    alert("An error ocurred creating the file "+ err.message)
-                                }
-                                              
-                                alert("The file has been succesfully saved");
-                            });
-                        });
+                        data.saveCalToFile();
                     }
                 }, {
                     type: 'separator'

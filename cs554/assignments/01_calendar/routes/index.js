@@ -6,6 +6,7 @@ let weekDays = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday',
 'Friday', 'Saturday']
 
 let data = require('../data');
+//console.log(data);
 
 const constructorMethod = (app) => {
     app.use("/api", apiRoutes);

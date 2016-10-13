@@ -1,4 +1,15 @@
-let calData = require('./data.json');
+let calData = require('../calendar.json');
+let fs = require('fs');
+
+let saveObjToFile = (obj) => {
+    fs.writeFile("./calendar.json", JSON.stringify(obj), function(err) {
+        if(err) {
+            console.error(err);
+        }
+
+        console.log("The file was saved!");
+    }); 
+}
 
 module.exports = {
     getYear: (year) => {
@@ -76,7 +87,9 @@ module.exports = {
         //this can probably just be saved as a file in the repo and
         //accessed like that because its meant to be a desktop app
     },
-    saveCalToFile: (filepath) => {
-        console.log("Saving file to " + filepath);
+    saveCalToFile: () => {
+        console.log("Saving the calendar");
+        console.log(calData);
+        saveObjToFile(calData);
     }
-};
+}
