@@ -74,11 +74,15 @@ module.exports = {
             calData[year][month][day] = {};
         }
         let currentIDs = Object.keys(calData[year][month][day]);
-        let idMax = Math.max(currentIDs);
+        console.log(currentIDs);
+        let intIDs = currentIDs.map(Number);
+        console.log(intIDs);
+        let idMax = Math.max.apply(null, currentIDs);
         let newID = idMax + 1;
+        console.log(newID);
         calData[year][month][day][newID] = eventObj;
         //save caldata file
-        
+        saveObjToFile(calData);
     },
     loadNewCalendar: (calObj) => {
         //take the object passed in and save it as the calendar data

@@ -60,6 +60,12 @@ const handlebarsInstance = exphbs.create({
                 count++;
             }
             return count;
+        },
+        formDayControl: (dayValue, dayIndex) => {
+            if(dayValue == dayIndex){
+                return 'selected'
+            }
+            return ''
         }
     },
     partialsDir: ['views/partials/']

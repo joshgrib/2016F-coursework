@@ -178,10 +178,12 @@ $month-nav-height: 40px;
         }
     }
 }
+#dayLeftPanel #eventList{
+    min-height: 100px;
+}
 .dayContent{
     background-color: $primary-color;
     color: $primary-color-text;
-    
     header{
         background-color: $primary-color-dark;
         padding: 5px;
@@ -210,8 +212,10 @@ $month-nav-height: 40px;
         list-style-position: inside;
         margin: 5px 5px;
         @media screen and (min-width: $break-small){
-            height: 100px;
-            overflow: hidden;
+            #monthView &{
+                overflow: hidden;
+                height:100px;
+            }
         }
         li{
             padding-left: 5px;

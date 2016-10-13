@@ -6,10 +6,48 @@ let weekDays = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday',
 'Friday', 'Saturday']
 
 let data = require('../data');
-//console.log(data);
 
 const constructorMethod = (app) => {
     app.use("/api", apiRoutes);
+
+    app.get("/addEvent/:year/:month", (req, res) => {
+        let year = req.params.year;
+        let month = req.params.month;
+        let dayNum = req.query.day;
+
+        let dayCount = new Date(year, month, 0).getDate();
+        let monthName = monthNames[month-1];
+        res.render("layouts/form", {
+            year: year,
+            month: month,
+            monthNames: monthNames,
+            dayCount: dayCount,
+            monthName: monthName,
+            dayNum: dayNum
+        });
+    });
+
+    app.post("/addEvent/:year/:month", (req, res) =>{
+        let urlYear = req.params.year;
+        let month = req.params.month;
+
+        let formData = req.body;
+        let day = formData.day;
+        let title = formData.title;
+        let location = formData.location;
+        let description = formData.description;
+
+        data.addEvent(urlYear, month, day, title, location, description)
+
+        res.redirect("/home");
+    })
+
+    app.get("/home", (req, res) => {
+        let d = new Date();
+        let year = d.getFullYear();
+        let month = d.getMonth() + 1;
+        res.redirect('/' + year + '/' + month);
+    });
 
     app.get("/:year/:month", (req, res) => {
         let year = req.params.year;
@@ -60,9 +98,6 @@ const constructorMethod = (app) => {
 
         let dayData = data.getDay(req.params.year, req.params.month, req.params.day);
 
-        //FOR TESTNG
-        data.addEvent(year, month+1, day+1, 'Test event', 'Test event location','Test event descrption');
-
         res.render("layouts/day", {
             yearNum: year,
             monthNum: month,
@@ -91,23 +126,6 @@ const constructorMethod = (app) => {
             monthName: monthNames[month],
             eventData: eventData
         });
-    });
-
-    app.get("/addEvent", (req, res) => {
-        res.render("layouts/form", {});
-    });
-
-    app.post("/addEvent", (req, res) =>{
-        let formData = req.body;
-        console.log("POST to /addEvent:" + formData);
-        //TODO
-    })
-
-    app.get("/home", (req, res) => {
-        let d = new Date();
-        let year = d.getFullYear();
-        let month = d.getMonth() + 1;
-        res.redirect('/' + year + '/' + month);
     });
     
     app.use("*", (req, res) => {

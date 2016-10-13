@@ -1,16 +1,24 @@
-<header>New Event For October 10th</header>
-<form class="col-xs-12 col-sm-6">
+<form class="col-xs-12 col-sm-6" method="post" action="/addEvent/{{year}}/{{month}}">
+    <header>
+        <span>New Event For {{monthName}}</span>
+        <select id="day" name="day">
+            <option>##</option>
+            {{#times dayCount}}
+            <option {{formDayControl ../dayNum (addOne this)}} value="{{addOne this}}">{{addOne this}}</option>
+            {{/times}}
+        </select>
+    </header>
     <div class="form-group row">
         <label for="formTitle" class="col-xs-12 col-form-label">Title</label>
-        <input class="form-control" type="text" placeholder="Event title" id="formTitle">
+        <input class="form-control" type="text" placeholder="Event title" id="formTitle"" name="title">
     </div>
     <div class="form-group row">
         <label for="formLocation" class="col-xs-12 col-form-label">Location</label>
-        <input class="form-control" type="text" placeholder="Event location" id="formLocation">
+        <input class="form-control" type="text" placeholder="Event location" id="formLocation" name="location">
     </div>
     <div class="form-group row">
         <label for="formDescription" class="col-xs-12 col-form-label">Description</label>
-        <textarea class="form-control" type="text" placeholder="Some details about the event" id="formDescription"></textarea>
+        <textarea class="form-control" type="text" placeholder="Some details about the event" id="formDescription" name="description"></textarea>
     </div>
     <div class="formErr">
         <p>Error!</p>
