@@ -113,6 +113,7 @@ $month-nav-height: 40px;
 #addEventButton{
     position: relative;
     overflow: nowrap;
+    min-width: 200px;
     p{
         @include centerer;
     }

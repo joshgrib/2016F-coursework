@@ -6,8 +6,6 @@ let saveObjToFile = (obj) => {
         if(err) {
             console.error(err);
         }
-
-        console.log("The file was saved!");
     }); 
 }
 

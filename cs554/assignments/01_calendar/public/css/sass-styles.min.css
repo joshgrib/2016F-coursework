@@ -99,7 +99,8 @@ a:link, a:visited {
 
 #addEventButton {
   position: relative;
-  overflow: nowrap; }
+  overflow: nowrap;
+  min-width: 200px; }
   #addEventButton p {
     position: absolute;
     top: 50%;
