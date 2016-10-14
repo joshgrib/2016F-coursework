@@ -1,4 +1,4 @@
-<form name="eventForm" class="col-xs-12 col-sm-6" method="post" action="/addEvent/{{year}}/{{month}}" onsubmit="validation()">
+<form name="eventForm" class="col-xs-12 col-sm-6" method="post" action="/addEvent/{{year}}/{{month}}">
     <header>
         <span>New Event For {{monthName}}</span>
         <select id="day" name="day" required title="Please select a day">
@@ -22,9 +22,6 @@
         <label for="formDescription" class="col-xs-12 col-form-label">Description</label>
         <textarea class="form-control" type="text" placeholder="Some details about the event" id="formDescription" name="description"></textarea>
     </div>
-    <div class="formErr">
-        <p>Error!</p>
-    </div>
     <div id="buttons">
         <button type="submit" class="btn btn-primary col-xs-3">Submit</button>
         <div class="col-xs-12 col-sm-8" id="homeButton">
@@ -34,8 +31,3 @@
         </div>
     </div>
 </form>
-<script>
-    let validation = () => {
-        alert("Validation!");
-    }
-</script>
