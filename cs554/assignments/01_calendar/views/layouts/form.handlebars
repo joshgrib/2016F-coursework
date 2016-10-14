@@ -1,9 +1,9 @@
-<form name="eventForm" class="col-xs-12 col-sm-6" method="post" action="/addEvent/{{year}}/{{month}}" onsubmit="return validateForm()">
+<form name="eventForm" class="col-xs-12 col-sm-6" method="post" action="/addEvent/{{year}}/{{month}}" onsubmit="validation()">
     <header>
         <span>New Event For {{monthName}}</span>
-        <select id="day" name="day">
+        <select id="day" name="day" required title="Please select a day">
             {{#if noDayGiven}}
-            <option selected disabled="true">##</option>
+            <option selected disabled>##</option>
             {{/if}}
             {{#times dayCount}}
             <option {{formDayControl ../dayNum (addOne this)}} value="{{addOne this}}">{{addOne this}}</option>
@@ -12,7 +12,7 @@
     </header>
     <div class="form-group row">
         <label for="formTitle" class="col-xs-12 col-form-label">Title</label>
-        <input class="form-control" type="text" placeholder="Event title" id="formTitle"" name="title">
+        <input class="form-control" type="text" placeholder="Event title" id="formTitle"" name="title" required pattern=".{1,}" title="Please enter a title">
     </div>
     <div class="form-group row">
         <label for="formLocation" class="col-xs-12 col-form-label">Location</label>
@@ -34,3 +34,8 @@
         </div>
     </div>
 </form>
+<script>
+    let validation = () => {
+        alert("Validation!");
+    }
+</script>

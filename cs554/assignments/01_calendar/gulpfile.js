@@ -8,7 +8,6 @@ const gulpSASS = require("gulp-sass");
 const cssFiles = "./public/css/source/**/*.css";
 const sassFiles = "./public/css/source/sass/**/*.scss";
 const vendorFiles = "./public/js/vendor/*.js";
-const jsFiles = "./public/js/src/*.js"
 
 gulp.task("sass", () => {
     gulp.src(sassFiles)
@@ -27,12 +26,6 @@ gulp.task("css", () => {
         .pipe(gulp.dest("./public/css/"));
 });
 
-gulp.task("js", () => {
-    gulp.src(jsFiles)
-        .pipe(concatenate("js.js"))
-        .pipe(gulp.dest("./public/js/"));
-});
-
 gulp.task("vendor", () => {
     return gulp
         .src(vendorFiles)
@@ -44,7 +37,6 @@ gulp.task("watch", () => {
     gulp.watch(cssFiles, ["css"]);
     gulp.watch(sassFiles, ["sass"]);
     gulp.watch(vendorFiles, ["vendor"]);
-    gulp.watch(jsFiles, ["js"]);
 });
 
-gulp.task("default", ["css", "sass", "js", "vendor", "watch"]);
+gulp.task("default", ["css", "sass", "vendor", "watch"]);
