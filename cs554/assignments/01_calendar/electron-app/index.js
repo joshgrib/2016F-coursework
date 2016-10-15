@@ -67,7 +67,7 @@ const constructorMethod = () => {
                   label: 'Change To Mobile Mode',
                   click: () => {
                       let win = BrowserWindow.getFocusedWindow();
-                      win.setSize(400, 600);
+                      win.setSize(500, 750);
                   }
               }
           ]
