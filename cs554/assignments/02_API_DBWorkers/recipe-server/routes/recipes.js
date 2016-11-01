@@ -3,7 +3,27 @@ const router = express.Router();
 const recipeData = require("../../recipe-data");
 const uuid = require("node-uuid");
 
+router.post("/", (req, res) => {
+    res.status(200).send("Recipe created");
+});
+
+router.get("/:id", (req, res) => {
+    res.status(200).send("Get info for a recipe here");
+});
+
 router.get("/", (req, res) => {
+    res.status(200).send("Get info for all recipes here");
+});
+
+router.put("/:id", (req, res) => {
+    res.status(200).send("Update a recipe here");
+});
+
+router.delete("/:id", (req, res) => {
+    res.status(200).send("Delete a recipe here");
+});
+
+router.get("/old/", (req, res) => {
     recipeData
         .getAllRecipes()
         .then((recipeList) => {
@@ -15,7 +35,7 @@ router.get("/", (req, res) => {
         });
 });
 
-router.post("/", (req, res) => {
+router.post("/old/", (req, res) => {
     let newRecipe = req.body.recipe;
 
     let redisConnection = req

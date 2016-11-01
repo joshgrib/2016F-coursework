@@ -1,4 +1,4 @@
-const recipeData = require("recipe-data");
+const recipeData = require("../recipe-data");
 const fetch = require('node-fetch');
 
 const NRP = require('node-redis-pubsub');

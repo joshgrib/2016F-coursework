@@ -1,14 +1,15 @@
 const recipeRoutes = require("./recipes");
+const userRoutes = require("./users");
 
 const constructorMethod = (app) => {
     app.use("/recipes", recipeRoutes);
-    app.get("/", (req, res) => {
-        res.render("home", {});
-    });
-    
+    app.use("/users", userRoutes);
     app.use("*", (req, res) => {
-        res.redirect("/");
+        res.sendStatus(404);
     })
 };
 
 module.exports = constructorMethod;
+
+//https://devcenter.heroku.com/articles/asynchronous-web-worker-model-using-rabbitmq-in-node
+//Check out this link - might be exactly what I'm doing
