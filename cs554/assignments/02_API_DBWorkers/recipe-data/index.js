@@ -80,7 +80,7 @@ let exportedMethods = {
     },
     updateUser(id, updatedUser){
         return userCollection().then((users) => {
-            let updatedRecipeData = {}
+            let updatedUserData = {};
             if(updatedUser.username){
                 updatedUserData.username = updatedUser.username;
             }
@@ -180,12 +180,33 @@ allRecipes.then((recipes) => {
 });
 
 allUsers.then((users) => {
-    console.log(users);
-}).then(() => {
-    console.log("##############");
-    console.log("#    Done    #");
-    console.log("##############");
+    console.log(`All users: ${JSON.stringify(users, null, 2)}`);
+    return users[0]
+}).then((user) => {
+    return exportedMethods.getUser(user._id);
+}).then((user) => {
+    console.log(`Got first user: ${JSON.stringify(user, null, 2)}`);
+    newUser = {
+        username: 'josh',
+        password: 'pass',
+        firstname: 'Josh',
+        lastname: 'Gribbon'
+    }
+    return exportedMethods.addUser(newUser);
+}).then((addedUser) => {
+    console.log(`Added user: ${JSON.stringify(addedUser, null, 2)}`);
+    return exportedMethods.updateUser(addedUser._id, {username: 'not_josh'});
+}).then((updatedUser) => {
+    console.log(`Updated user: ${JSON.stringify(updatedUser, null, 2)}`);
+    return exportedMethods.removeUser(updatedUser._id);
+}).then((stuff) => {
+    console.log(`Deleted stuff: ${stuff}`);
+    return exportedMethods.getAllUsers();
+}).then((users) => {
+    console.log(`All users: ${JSON.stringify(users, null, 2)}`);
 })
+
+
 
 /*
 TEST:
@@ -193,4 +214,6 @@ GetUser(id)
 addUser(user)
 removeRecipe(id)
 removeUser(id)
+updateRecipe(id, updateRecipe)
+updateUser(id, updatedUser)
 */
