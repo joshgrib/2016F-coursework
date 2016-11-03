@@ -1,5 +1,7 @@
-const recipeCollection = require("../recipeCollection");
-const recipeData = require("../");
+const collections = require("../config/mongoCollections");
+const recipeCollection = collections.recipes;
+const userCollection = collections.users;
+const data = require("../");
 
 const recipeList = [
     {
@@ -69,6 +71,23 @@ const recipeList = [
     }
 ];
 
+const userList = [
+    {
+        username: "testuser0",
+        password: "password",
+        firstname: "Test",
+        lastname: "User"
+    }, {
+        username: "testuser1",
+        password: "password",
+        firstname: "Other",
+        lastname: "User"
+    }
+];
+
+let allRecipes = [];
+let allUsers = [];
+
 recipeCollection().then((recipes) => {
     return recipes
         .removeMany({})
@@ -77,13 +96,33 @@ recipeCollection().then((recipes) => {
         });
 }).then((recipes) => {
     let allRecipes = recipeList.map(recipe => {
-        return recipeData.addRecipe(recipe);
+        return data.addRecipe(recipe);
     });
-
     return Promise.all(allRecipes);
 }).then((newRecipes) => {
     // match on water
-    return recipeData.createRecipeRelationship(newRecipes[0]._id, newRecipes[1]._id);
+    return data.createRecipeRelationship(newRecipes[0]._id, newRecipes[1]._id);
 }).then(() => {
-    return recipeData.getAllRecipes();
-}).then(console.log);
+    return data.getAllRecipes();
+}).then( (recipes) => {
+    console.log("Done seeding recipes");
+    console.log(recipes);
+});
+
+userCollection().then((users) => {
+    return users
+        .removeMany({})
+        .then(() => {
+            return users;
+        });
+}).then((users) => {
+    let allUsers = userList.map(user => {
+        return data.addUser(user);
+    });
+    return Promise.all(allUsers);
+}).then(() => {
+    return data.getAllUsers();
+}).then((users) => {
+    console.log("Done seeding users");
+    console.log(users);
+})

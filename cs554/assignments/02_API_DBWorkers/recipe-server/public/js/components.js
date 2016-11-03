@@ -534,4 +534,4 @@ var RecipeList = React.createClass({
     }
 });
 
-ReactDOM.render(React.createElement(RecipeList, { url: "/recipes" }), document.getElementById('content'));
+ReactDOM.render(React.createElement(RecipeList, { url: "/recipes/old" }), document.getElementById('content'));

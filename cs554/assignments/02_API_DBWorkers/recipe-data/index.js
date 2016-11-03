@@ -1,4 +1,6 @@
-const recipeCollection = require("./recipeCollection");
+const collections = require('./config/mongoCollections');
+const recipeCollection = collections.recipes;//require("./recipeCollection");
+const userCollection = collections.users;
 
 let exportedMethods = {
     getAllRecipes() {
@@ -8,9 +10,21 @@ let exportedMethods = {
                 .toArray();
         });
     },
+    getAllUsers() {
+        return userCollection().then((users) => {
+            return users
+                .find()
+                .toArray();
+        });
+    },
     getRecipe(id) {
         return recipeCollection().then((recipes) => {
             return recipes.findOne({_id: id})
+        })
+    },
+    getUser(id) {
+        return userCollection().then((users) => {
+            return users.findOne({_id: id})
         })
     },
     addRecipe(recipe) {
@@ -27,6 +41,65 @@ let exportedMethods = {
             return recipes.insertOne(recipe)
         }).then((recipe) => {
             return this.getRecipe(recipe.insertedId);
+        });
+    },
+    addUser(user) {
+        return userCollection().then((users) => {
+            return users.insertOne(user)
+        }).then((user) => {
+            return this.getUser(user.insertedId);
+        });
+    },
+    removeRecipe(id) {
+        return recipeCollection().then((recipes) => {
+            return recipes.removeOne({ _id: id }).then((deletionInfo) => {
+                if(deletionInfo.deletedCount === 0){
+                    throw (`Could not delete recipe with id of ${id}`)
+                }
+            })
+        });
+    },
+    removeUser(id) {
+        return userCollection().then((users) => {
+            return users.removeOne({ _id: id }).then((deletionInfo) => {
+                if(deletionInfo.deletedCount === 0){
+                    throw (`Could not delete user with id of ${id}`)
+                }
+            })
+        });
+    },
+    updateRecipe(id, updatedRecipe){
+        return recipeCollection().then((recipes) => {
+            let updateCommand = {
+                $set: updatedRecipe
+            };
+            return recipes.updateOne({ _id: id}, updateCommand).then((result) => {
+                return this.getRecipe(id);
+            })
+        });
+    },
+    updateUser(id, updatedUser){
+        return userCollection().then((users) => {
+            let updatedRecipeData = {}
+            if(updatedUser.username){
+                updatedUserData.username = updatedUser.username;
+            }
+            if(updatedUser.password){
+                updatedUserData.password = updatedUser.password;
+            }
+            if(updatedUser.firstname){
+                updatedUserData.firstname = updatedUser.firstname;
+            }
+            if(updatedUser.lastname){
+                updatedUserData.lastname = updatedUser.lastname;
+            }
+
+            let updateCommand = {
+                $set: updatedUserData
+            };
+            return users.updateOne({ _id: id}, updateCommand).then((result) => {
+                return this.getUser(id);
+            })
         });
     },
     createRecipeRelationship(firstRecipe, firstMatchAmount, secondRecipe, secondMatchAmount) {
@@ -94,3 +167,30 @@ let exportedMethods = {
 }
 
 module.exports = exportedMethods;
+
+let allRecipes = exportedMethods.getAllRecipes();
+let allUsers = exportedMethods.getAllUsers();
+
+allRecipes.then((recipes) => {
+    console.log(recipes);
+}).then( () => {
+    console.log("##############");
+    console.log("#    Done    #");
+    console.log("##############");
+});
+
+allUsers.then((users) => {
+    console.log(users);
+}).then(() => {
+    console.log("##############");
+    console.log("#    Done    #");
+    console.log("##############");
+})
+
+/*
+TEST:
+GetUser(id)
+addUser(user)
+removeRecipe(id)
+removeUser(id)
+*/
