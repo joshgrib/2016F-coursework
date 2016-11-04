@@ -38,9 +38,7 @@ router.get("/old/", (req, res) => {
 router.post("/old/", (req, res) => {
     let newRecipe = req.body.recipe;
 
-    let redisConnection = req
-        .app
-        .get("redis");
+    let redisConnection = req.app.get("redis");
 
     let messageId = uuid.v4();
     let killswitchTimeoutId = undefined;

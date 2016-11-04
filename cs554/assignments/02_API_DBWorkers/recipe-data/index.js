@@ -24,8 +24,8 @@ let exportedMethods = {
     },
     getUser(id) {
         return userCollection().then((users) => {
-            return users.findOne({_id: id})
-        })
+            return users.findOne({_id: id});
+        });
     },
     addRecipe(recipe) {
         return recipeCollection().then((recipes) => {
@@ -45,7 +45,7 @@ let exportedMethods = {
     },
     addUser(user) {
         return userCollection().then((users) => {
-            return users.insertOne(user)
+            return users.insertOne(user);
         }).then((user) => {
             return this.getUser(user.insertedId);
         });
@@ -80,22 +80,8 @@ let exportedMethods = {
     },
     updateUser(id, updatedUser){
         return userCollection().then((users) => {
-            let updatedUserData = {};
-            if(updatedUser.username){
-                updatedUserData.username = updatedUser.username;
-            }
-            if(updatedUser.password){
-                updatedUserData.password = updatedUser.password;
-            }
-            if(updatedUser.firstname){
-                updatedUserData.firstname = updatedUser.firstname;
-            }
-            if(updatedUser.lastname){
-                updatedUserData.lastname = updatedUser.lastname;
-            }
-
             let updateCommand = {
-                $set: updatedUserData
+                $set: updatedUser
             };
             return users.updateOne({ _id: id}, updateCommand).then((result) => {
                 return this.getUser(id);
@@ -168,6 +154,7 @@ let exportedMethods = {
 
 module.exports = exportedMethods;
 
+/*
 let allRecipes = exportedMethods.getAllRecipes();
 let allUsers = exportedMethods.getAllUsers();
 
@@ -205,15 +192,15 @@ allUsers.then((users) => {
 }).then((users) => {
     console.log(`All users: ${JSON.stringify(users, null, 2)}`);
 })
-
+*/
 
 
 /*
 TEST:
-GetUser(id)
-addUser(user)
+-getUser(id)
+-addUser(user)
 removeRecipe(id)
-removeUser(id)
+-removeUser(id)
 updateRecipe(id, updateRecipe)
-updateUser(id, updatedUser)
+-updateUser(id, updatedUser)
 */
