@@ -37,12 +37,22 @@ const rewriteUnsupportedBrowserMethods = (req, res, next) => {
     next();
 };
 
+let checkHeaders = (req, res, next) => {
+    let authToken = req.get('Auth-Token');
+    //TODO: check auth-token here
+    console.log(authToken);
+    next();
+};
+
 app.set('redis', require("./redis-connection"));
 
 app.use("/public", static);
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(rewriteUnsupportedBrowserMethods);
+app.use(checkHeaders);
+
+
 
 app.engine('handlebars', handlebarsInstance.engine);
 app.set('view engine', 'handlebars');

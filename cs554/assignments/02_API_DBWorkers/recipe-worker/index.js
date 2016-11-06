@@ -108,7 +108,7 @@ redisConnection.on('delete-user:*', (inData, channel) => {
             redisConnection.emit(`user-deleted-failed:${messageId}`, err);
         })
 });
-/*
+
 redisConnection.on('add-recipe:*', (inData, channel) => {
     let messageId = inData.requestId;
     let addrecipe = data
@@ -165,4 +165,3 @@ redisConnection.on('delete-recipe:*', (inData, channel) => {
             redisConnection.emit(`recipe-deleted-failed:${messageId}`, err);
         })
 });
-*/

@@ -13,7 +13,7 @@ let exportedMethods = {
     getAllUsers() {
         return userCollection().then((users) => {
             return users
-                .find()
+                .find({}, {password:false, _id:false})
                 .toArray();
         });
     },
@@ -23,8 +23,9 @@ let exportedMethods = {
         })
     },
     getUser(id) {
+        console.log(id);
         return userCollection().then((users) => {
-            return users.findOne({_id: id});
+            return users.findOne({_id: id}, {password:false});
         });
     },
     addRecipe(recipe) {
@@ -192,7 +193,7 @@ allUsers.then((users) => {
 }).then((users) => {
     console.log(`All users: ${JSON.stringify(users, null, 2)}`);
 })
-*/
+/*
 
 
 /*
