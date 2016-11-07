@@ -2,7 +2,11 @@ const collections = require('./config/mongoCollections');
 const recipeCollection = collections.recipes;//require("./recipeCollection");
 const userCollection = collections.users;
 
+const NodeCache = require('node-cache');
+const myCache = new NodeCache( {checkperiod: 120} );
+
 let exportedMethods = {
+    cache: myCache,
     getAllRecipes() {
         return recipeCollection().then((recipes) => {
             return recipes
@@ -13,19 +17,36 @@ let exportedMethods = {
     getAllUsers() {
         return userCollection().then((users) => {
             return users
-                .find({}, {password:false, _id:false})
-                .toArray();
+                //uncomment below to hide sensitive stuff from results
+                .find({}/*, {password:false, _id:false, authToken:false}*/)
+                .toArray().then((result) => {
+                    console.log('result');
+                    console.log(result);
+                    this.cache.set('user-list', result);
+                    return result;
+                })
         });
     },
     getRecipe(id) {
         return recipeCollection().then((recipes) => {
-            return recipes.findOne({_id: id})
+            return recipes.findOne({_id: id}).then((recipe) => {
+                if(!recipe){
+                    throw "Recipe not found"
+                }else{
+                    return recipe
+                }
+            })
         })
     },
     getUser(id) {
-        console.log(id);
         return userCollection().then((users) => {
-            return users.findOne({_id: id}, {password:false});
+            return users.findOne({_id: id}, {password:false}).then((user) => {
+                if(!user){
+                    throw "User not found";
+                }else{
+                    return user;
+                }
+            })
         });
     },
     addRecipe(recipe) {
@@ -48,7 +69,9 @@ let exportedMethods = {
         return userCollection().then((users) => {
             return users.insertOne(user);
         }).then((user) => {
-            return this.getUser(user.insertedId);
+            return this.getUser(user.insertedId).then((dbUser) => {
+                return dbUser;
+            });
         });
     },
     removeRecipe(id) {
@@ -88,6 +111,33 @@ let exportedMethods = {
                 return this.getUser(id);
             })
         });
+    },
+    loginUser(username, password, token){
+        return userCollection().then((users) => {
+            return users.findOne(
+                {username:username, password:password}
+            ).then((result) => {
+                if(!result){
+                    throw "No user found with those credentials"
+                }else{
+                    result['authToken'] = token;
+                    let updateCommand = {
+                        $set: result
+                    };
+                    return users.updateOne(
+                        {_id:result._id}, updateCommand
+                    ).then((updateResult) => {
+                        return this.getUser(result._id).then((dbUser) => {
+                            this.cache.set(dbUser.authToken, dbUser._id);
+                            return dbUser;
+                        })
+                    })
+                }
+            })
+        })
+    },
+    getUserByToken(token){
+        //
     },
     createRecipeRelationship(firstRecipe, firstMatchAmount, secondRecipe, secondMatchAmount) {
         return recipeCollection().then((recipes) => {

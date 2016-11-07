@@ -9,6 +9,8 @@ const exphbs = require('express-handlebars');
 
 const Handlebars = require('handlebars');
 
+let data = require('../recipe-data');
+
 const handlebarsInstance = exphbs.create({
     defaultLayout: 'main',
     // Specify helpers which are only registered on this instance.
@@ -37,11 +39,23 @@ const rewriteUnsupportedBrowserMethods = (req, res, next) => {
     next();
 };
 
+const cache = data.cache;
 let checkHeaders = (req, res, next) => {
     let authToken = req.get('Auth-Token');
-    //TODO: check auth-token here
-    console.log(authToken);
-    next();
+    res.set('reqAuthToken', authToken);
+    if(authToken == undefined){
+        next();
+    }else{
+        cache.get(authToken, (err, val) => {
+            if(err || (val == undefined)){
+                res.set('isAuthorized', false);
+            }else{
+                console.log('Auth-Token: ' + authToken);
+                res.set('isAuthorized', true);
+            }
+            next();
+        });
+    }
 };
 
 app.set('redis', require("./redis-connection"));

@@ -40,6 +40,7 @@
     "express-handlebars": "^3.0.0",
     "handlebars": "^4.0.5",
     "mongodb": "^2.1.18",
+    "node-cache": "^4.1.0",
     "node-redis-pubsub": "^0.9.0",
     "node-uuid": "^1.4.7",
     "xss": "^0.2.13"
