@@ -44,18 +44,17 @@ let checkHeaders = (req, res, next) => {
     let authToken = req.get('Auth-Token');
     res.set('reqAuthToken', authToken);
     if(authToken == undefined){
-        next();
+        res.set('isAuthorized', false);
     }else{
         cache.get(authToken, (err, val) => {
             if(err || (val == undefined)){
                 res.set('isAuthorized', false);
             }else{
-                console.log('Auth-Token: ' + authToken);
                 res.set('isAuthorized', true);
             }
-            next();
         });
     }
+    next();
 };
 
 app.set('redis', require("./redis-connection"));

@@ -41,6 +41,10 @@ let exportedMethods = {
     getUser(id) {
         return userCollection().then((users) => {
             return users.findOne({_id: id}, {password:false}).then((user) => {
+                console.log("USER:");
+                console.log(user);
+                //THERE IS A USER HERE SO MAYBE THE CHECK BELOW IS BROKEN?
+                //IF NOT IT'S COMING FROM SOMEWHERE ELSE SO GREP FOR THAT
                 if(!user){
                     throw "User not found";
                 }else{
@@ -120,24 +124,13 @@ let exportedMethods = {
                 if(!result){
                     throw "No user found with those credentials"
                 }else{
-                    result['authToken'] = token;
-                    let updateCommand = {
-                        $set: result
-                    };
-                    return users.updateOne(
-                        {_id:result._id}, updateCommand
-                    ).then((updateResult) => {
-                        return this.getUser(result._id).then((dbUser) => {
-                            this.cache.set(dbUser.authToken, dbUser._id);
-                            return dbUser;
-                        })
+                    return this.getUser(result._id).then((dbUser) => {
+                        this.cache.set(token, dbUser._id);
+                        return dbUser;
                     })
                 }
             })
         })
-    },
-    getUserByToken(token){
-        //
     },
     createRecipeRelationship(firstRecipe, firstMatchAmount, secondRecipe, secondMatchAmount) {
         return recipeCollection().then((recipes) => {

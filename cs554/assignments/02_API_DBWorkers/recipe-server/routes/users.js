@@ -51,20 +51,15 @@ router.post("/session", (req, res) => {
     let password = req.body.password;
     let newToken = uuid.v4();
 
-    data.loginUser(username, password, newToken).then((user) => {
+    data.loginUser(username, password, newToken).then((result) => {
         //get user by auth token
         //return that token, error otherwise
-        return data.getUser(user._id).then((user) => {
-            //db checks if user isnt't foudn so thats fine
-            //check that user has auth token in db
-            //return the token
-            let tokenResult = user.authToken;
-            if(!tokenResult){
-                res.status(500).send("Error setting auth token for user");
-            }else{
-                res.set('Auth-Token', tokenResult);
-                res.json(tokenResult); 
-            }
+        let id = cache.get(newToken);
+        return data.getUser(id).then((user) => {
+            res.set('Auth-Token', newToken);
+            res.json(newToken); 
+        }).catch((err) => {
+            throw err;
         })
     }).catch((err) => {
         res.status(500).json(err.toString());
@@ -135,14 +130,35 @@ router.get("/", (req, res) => {
 
 //update a user
 router.put("/", (req, res) => {
+    let newUser = req.body.user;
+    console.log(newUser);
+    //check auth
+    let isAuthorized = res.get('isAuthorized');
+    if(isAuthorized === 'false'){
+        res.status(401).json(isAuthorized);
+        return;
+    }
+
+    let authToken = req.get('Auth-Token');
+    let id = cache.get(authToken);
+    console.log(id);
+
+    let newID = data.getUser(id).then((user) => {
+        return user._id;
+    })
+
     let redisConnection = req.app.get("redis");
     let messageId = uuid.v4();
 
-    redisConnection.on(`update-user:${messageId}`, (users, channel) => {
+
+
+    redisConnection.on(`user-updated:${messageId}`, (users, channel) => {
+        console.log(users);
         res.json(users);
         redisConnection.off(`user-updated:${messageId}`);
         redisConnection.off(`user-updated-failed:${messageId}`);
         clearTimeout(killswitchTimeoutId);
+        return;
     });
 
     redisConnection.on(`user-updated-failed:${messageId}`, (error, channel) => {
@@ -150,21 +166,30 @@ router.put("/", (req, res) => {
         redisConnection.off(`user-updated:${messageId}`);
         redisConnection.off(`user-updated-failed:${messageId}`);
         clearTimeout(killswitchTimeoutId);
+        return;
     });
 
     killswitchTimeoutId = setTimeout(() => {
         redisConnection.off(`user-updated:${messageId}`);
         redisConnection.off(`user-updated-failed:${messageId}`);
         res.status(500).json({error: "Timeout error"})
+        return;
     }, 5000);
 
-    redisConnection.emit(`update-user:${messageId}`, {
-        requestId: messageId
-    });
+    newID.then((_id) => {
+        console.log("_:" + _id);
+        redisConnection.emit(`update-user:${messageId}`, {
+            requestId: messageId,
+            user: newUser,
+            userId: _id
+        }); 
+    })  
 });
 
 //delete a user
 router.delete("/", (req, res) => {
+    //check auth
+
     let redisConnection = req.app.get("redis");
     let messageId = uuid.v4();
 
