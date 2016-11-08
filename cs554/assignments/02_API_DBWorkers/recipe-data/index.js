@@ -2,12 +2,7 @@ const collections = require('./config/mongoCollections');
 const recipeCollection = collections.recipes;//require("./recipeCollection");
 const userCollection = collections.users;
 
-//const NodeCache = require('node-cache');
-//const myCache = new NodeCache( {checkperiod: 120} );
-
 var ObjectId = require('mongodb').ObjectId;
-
-//var cache = require('express-redis-cache')({host: 'localhost', port: 6379});
 
 var redis = require("redis");
 var cache = redis.createClient(6379, 'localhost');
@@ -26,9 +21,7 @@ let exportedMethods = {
                 //uncomment below to hide sensitive stuff from results
                 .find({}/*, {password:false, _id:false, authToken:false}*/)
                 .toArray().then((result) => {
-                    console.log("caching user list...");
                     cache.set('user-list', JSON.stringify(result));
-                    console.log(result);
                     return result;
                 })
         });
@@ -84,7 +77,6 @@ let exportedMethods = {
             return users.insertOne(user);
         }).then((user) => {
             return this.getUser(user.insertedId).then((dbUser) => {
-                cache.set(dbUser._id.toString(), JSON.stringify(dbUser));
                 return dbUser;
             });
         });
@@ -138,7 +130,6 @@ let exportedMethods = {
             };
             return users.updateOne({ _id: id}, updateCommand).then((result) => {
                 return this.getUser(id).then((user) => {
-                    cache.set(user._id.toString(), JSON.stringify(user));
                     return user
                 });
             })
@@ -149,11 +140,16 @@ let exportedMethods = {
             return users.findOne(
                 {username:username, password:password}
             ).then((result) => {
+                console.log('res');
+                console.log(result);
                 if(!result){
                     throw "No user found with those credentials"
                 }else{
                     return this.getUser(result._id).then((dbUser) => {
-                        cache.set(token.toString(), dbUser._id.toString());
+                        let tokenString = token.toString();
+                        let id = dbUser._id;
+                        let idString = id.toString();
+                        cache.set(tokenString, idString);
                         return dbUser;
                     })
                 }

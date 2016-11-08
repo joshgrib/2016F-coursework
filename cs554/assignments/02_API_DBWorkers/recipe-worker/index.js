@@ -107,7 +107,7 @@ redisConnection.on('delete-user:*', (inData, channel) => {
     let deleteUser = data
         .removeUser(inData.userId)
         .then(() => {
-            redisConnection.emit(`user-deleted:${messageId}`);
+            redisConnection.emit(`user-deleted:${messageId}`, inData.userId);
         }).catch((err) => {
             redisConnection.emit(`user-deleted-failed:${messageId}`, err);
         })

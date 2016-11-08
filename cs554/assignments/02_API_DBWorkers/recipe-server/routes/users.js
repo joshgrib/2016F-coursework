@@ -11,8 +11,6 @@ const config = {
 
 const redisConnection = new NRP(config); // This is the NRP client
 
-//var cache = require('express-redis-cache')({host: 'localhost', port: 6379});
-
 var redis = require("redis");
 var cache = redis.createClient(6379, 'localhost');
 
@@ -58,11 +56,15 @@ router.post("/session", (req, res) => {
     data.loginUser(username, password, newToken).then((result) => {
         //get user by auth token
         //return that token, error otherwise
-        let authID = res.get('tokenID');
-        return data.getUser(authID).then((user) => {
-            res.set('Auth-Token', newToken);
-            res.json(newToken); 
-        })
+        if(result._id){
+            return data.getUser(result._id).then((user) => {
+                res.set('Auth-Token', newToken);
+                res.json(newToken); 
+            })
+        }else{
+            throw "Error logging user in"
+        }
+        
     }).catch((err) => {
         res.status(500).json(err.toString());
     })
@@ -105,14 +107,12 @@ router.get("/", (req, res) => {
     let redisConnection = req.app.get("redis");
     let messageId = uuid.v4();
 
-    let ulist = cache.get('user-list', (err, val) => {
+    cache.get('user-list', (err, result) => {
         console.log("User list:");
-        if(err || (val == undefined)){
+        if(err || !result){
             console.log("user list not cached yet");
-            return;
         }else{
-            console.log(val);
-            return;
+            console.log(result);
         }
     });
 
@@ -177,12 +177,24 @@ router.put("/", (req, res) => {
         return;
     }, 5000);
 
-    let authID = res.get('tokenID');
-    redisConnection.emit(`update-user:${messageId}`, {
-        requestId: messageId,
-        user: newUser,
-        userId: authID
-    });     
+
+ 
+    let authToken = req.get('Auth-Token');
+    let authTokenString = authToken.toString();
+    cache.get(authTokenString, (err, result) => {
+        if(err || !result){
+            res.status(500).send("Error getting cached user ID");
+            redisConnection.off(`user-updated:${messageId}`);
+            redisConnection.off(`user-updated-failed:${messageId}`);
+            clearTimeout(killswitchTimeoutId);
+        }else{
+            redisConnection.emit(`update-user:${messageId}`, {
+                requestId: messageId,
+                user: newUser,
+                userId: result
+            });    
+        }
+    });
 });
 
 //delete a user
@@ -220,18 +232,18 @@ router.delete("/", (req, res) => {
     
 
     let authToken = req.get('Auth-Token');
-    console.log('at');
-    console.log(authToken.toString());
-    cache.get(authToken.toString(), (err, cacheId) => {
-        console.log('cid');
-        console.log(cacheId);
-        if(!err){
+    let authTokenString = authToken.toString();
+    cache.get(authTokenString, (err, result) => {
+        if(err || !result){
+            res.status(500).send("Error getting cached user ID");
+            redisConnection.off(`user-deleted:${messageId}`);
+            redisConnection.off(`user-deleted-failed:${messageId}`);
+            clearTimeout(killswitchTimeoutId);
+        }else{
             redisConnection.emit(`delete-user:${messageId}`, {
                 requestId: messageId,
-                userId: cacheId
+                userId: result
             });
-        }else{
-            res.status(500).send("Error getting cached user ID");
         }
     });
 });
