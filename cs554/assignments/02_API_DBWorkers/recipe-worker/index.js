@@ -154,6 +154,7 @@ redisConnection.on('update-recipe:*', (inData, channel) => {
     let messageId = inData.requestId;
     let id = inData.recipeId;
     let recipe = inData.recipe;
+    let userId = inData.userId;
     let updateRecipe = data
         .checkRecipeOwner(recipeId, userId)
         .then((isOwner) => {

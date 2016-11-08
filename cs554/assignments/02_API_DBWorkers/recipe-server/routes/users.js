@@ -118,8 +118,8 @@ router.get("/:id", (req, res) => {
     let idString = userId.toString();
     cache.get(idString, (err, result) => {
         if((!err && result) && CHECK_CACHE){
-            redisConnection.off(`user-updated:${messageId}`);
-            redisConnection.off(`user-updated-failed:${messageId}`);
+            redisConnection.off(`user-got:${messageId}`);
+            redisConnection.off(`user-got-failed:${messageId}`);
             clearTimeout(killswitchTimeoutId);
             return res.json(JSON.parse(result));
         }else{
@@ -167,8 +167,8 @@ router.get("/", (req, res) => {
     //check cache
     cache.get('user-list', (err, result) => {
         if((!err && result) && CHECK_CACHE){
-            redisConnection.off(`user-updated:${messageId}`);
-            redisConnection.off(`user-updated-failed:${messageId}`);
+            redisConnection.off(`users-got:${messageId}`);
+            redisConnection.off(`users-got-failed:${messageId}`);
             clearTimeout(killswitchTimeoutId);
             return res.json(JSON.parse(result));
         }else{

@@ -112,8 +112,8 @@ router.get("/:id", (req, res) => {
     let idString = recipeId.toString();
     cache.get(idString, (err, result) => {
         if((!err && result) && CHECK_CACHE){
-            redisConnection.off(`recipe-updated:${messageId}`);
-            redisConnection.off(`recipe-updated-failed:${messageId}`);
+            redisConnection.off(`recipe-got:${messageId}`);
+            redisConnection.off(`recipe-got-failed:${messageId}`);
             clearTimeout(killswitchTimeoutId);
             return res.json(JSON.parse(result));
         }else{
@@ -134,7 +134,7 @@ router.get("/", (req, res) => {
     redisConnection.on(`recipes-got:${messageId}`, (recipes, channel) => {
         let idString = 'recipe-list';
         let recipesString = JSON.stringify(recipes);
-        cache.set(idString, recipesString, {expire: 60*10}, ()=>{});
+        cache.set(idString, recipesString, {expire: 60*60}, ()=>{});
 
         res.json(recipes);
 
@@ -161,8 +161,8 @@ router.get("/", (req, res) => {
     //check cache
     cache.get('recipe-list', (err, result) => {
         if((!err && result) && CHECK_CACHE){
-            redisConnection.off(`recipe-updated:${messageId}`);
-            redisConnection.off(`recipe-updated-failed:${messageId}`);
+            redisConnection.off(`recipes-got:${messageId}`);
+            redisConnection.off(`recipes-got-failed:${messageId}`);
             clearTimeout(killswitchTimeoutId);
             return res.json(JSON.parse(result));
         }else{
@@ -188,7 +188,7 @@ router.put("/:id", (req, res) => {
     redisConnection.on(`recipe-updated:${messageId}`, (recipe, channel) => {
         let idString = recipe._id.toString();
         let recipeString = JSON.stringify(recipe);
-        cache.set(idString, recipeString, {expire: 60*5}, ()=>{});
+        cache.set(idString, recipeString, {expire: 60*60}, ()=>{});
 
         res.json(recipe);
 
