@@ -11,7 +11,10 @@ const config = {
 
 const redisConnection = new NRP(config); // This is the NRP client
 
-const cache = data.cache;
+//var cache = require('express-redis-cache')({host: 'localhost', port: 6379});
+
+var redis = require("redis");
+var cache = redis.createClient(6379, 'localhost');
 
 //add a user
 router.post("/", (req, res) => {
@@ -51,15 +54,14 @@ router.post("/session", (req, res) => {
     let password = req.body.password;
     let newToken = uuid.v4();
 
+    //change this to redis MQ
     data.loginUser(username, password, newToken).then((result) => {
         //get user by auth token
         //return that token, error otherwise
-        let id = cache.get(newToken);
-        return data.getUser(id).then((user) => {
+        let authID = res.get('tokenID');
+        return data.getUser(authID).then((user) => {
             res.set('Auth-Token', newToken);
             res.json(newToken); 
-        }).catch((err) => {
-            throw err;
         })
     }).catch((err) => {
         res.status(500).json(err.toString());
@@ -103,6 +105,17 @@ router.get("/", (req, res) => {
     let redisConnection = req.app.get("redis");
     let messageId = uuid.v4();
 
+    let ulist = cache.get('user-list', (err, val) => {
+        console.log("User list:");
+        if(err || (val == undefined)){
+            console.log("user list not cached yet");
+            return;
+        }else{
+            console.log(val);
+            return;
+        }
+    });
+
     redisConnection.on(`users-got:${messageId}`, (users, channel) => {
         res.json(users);
         redisConnection.off(`users-got:${messageId}`);
@@ -131,29 +144,17 @@ router.get("/", (req, res) => {
 //update a user
 router.put("/", (req, res) => {
     let newUser = req.body.user;
-    console.log(newUser);
     //check auth
     let isAuthorized = res.get('isAuthorized');
     if(isAuthorized === 'false'){
-        res.status(401).json(isAuthorized);
+        res.sendStatus(401);
         return;
     }
-
-    let authToken = req.get('Auth-Token');
-    let id = cache.get(authToken);
-    console.log(id);
-
-    let newID = data.getUser(id).then((user) => {
-        return user._id;
-    })
 
     let redisConnection = req.app.get("redis");
     let messageId = uuid.v4();
 
-
-
     redisConnection.on(`user-updated:${messageId}`, (users, channel) => {
-        console.log(users);
         res.json(users);
         redisConnection.off(`user-updated:${messageId}`);
         redisConnection.off(`user-updated-failed:${messageId}`);
@@ -176,24 +177,27 @@ router.put("/", (req, res) => {
         return;
     }, 5000);
 
-    newID.then((_id) => {
-        console.log("_:" + _id);
-        redisConnection.emit(`update-user:${messageId}`, {
-            requestId: messageId,
-            user: newUser,
-            userId: _id
-        }); 
-    })  
+    let authID = res.get('tokenID');
+    redisConnection.emit(`update-user:${messageId}`, {
+        requestId: messageId,
+        user: newUser,
+        userId: authID
+    });     
 });
 
 //delete a user
 router.delete("/", (req, res) => {
     //check auth
+    let isAuthorized = res.get('isAuthorized');
+    if(isAuthorized === 'false'){
+        res.sendStatus(401);
+        return;
+    }
 
     let redisConnection = req.app.get("redis");
     let messageId = uuid.v4();
 
-    redisConnection.on(`delete-user:${messageId}`, (users, channel) => {
+    redisConnection.on(`user-deleted:${messageId}`, (users, channel) => {
         res.json(users);
         redisConnection.off(`user-deleted:${messageId}`);
         redisConnection.off(`user-deleted-failed:${messageId}`);
@@ -213,8 +217,22 @@ router.delete("/", (req, res) => {
         res.status(500).json({error: "Timeout error"})
     }, 5000);
 
-    redisConnection.emit(`delete-user:${messageId}`, {
-        requestId: messageId
+    
+
+    let authToken = req.get('Auth-Token');
+    console.log('at');
+    console.log(authToken.toString());
+    cache.get(authToken.toString(), (err, cacheId) => {
+        console.log('cid');
+        console.log(cacheId);
+        if(!err){
+            redisConnection.emit(`delete-user:${messageId}`, {
+                requestId: messageId,
+                userId: cacheId
+            });
+        }else{
+            res.status(500).send("Error getting cached user ID");
+        }
     });
 });
 

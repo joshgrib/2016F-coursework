@@ -2,11 +2,17 @@ const collections = require('./config/mongoCollections');
 const recipeCollection = collections.recipes;//require("./recipeCollection");
 const userCollection = collections.users;
 
-const NodeCache = require('node-cache');
-const myCache = new NodeCache( {checkperiod: 120} );
+//const NodeCache = require('node-cache');
+//const myCache = new NodeCache( {checkperiod: 120} );
+
+var ObjectId = require('mongodb').ObjectId;
+
+//var cache = require('express-redis-cache')({host: 'localhost', port: 6379});
+
+var redis = require("redis");
+var cache = redis.createClient(6379, 'localhost');
 
 let exportedMethods = {
-    cache: myCache,
     getAllRecipes() {
         return recipeCollection().then((recipes) => {
             return recipes
@@ -20,14 +26,17 @@ let exportedMethods = {
                 //uncomment below to hide sensitive stuff from results
                 .find({}/*, {password:false, _id:false, authToken:false}*/)
                 .toArray().then((result) => {
-                    console.log('result');
+                    console.log("caching user list...");
+                    cache.set('user-list', JSON.stringify(result));
                     console.log(result);
-                    this.cache.set('user-list', result);
                     return result;
                 })
         });
     },
     getRecipe(id) {
+        if(typeof id == 'string'){
+            id = new ObjectId(id);
+        }
         return recipeCollection().then((recipes) => {
             return recipes.findOne({_id: id}).then((recipe) => {
                 if(!recipe){
@@ -39,13 +48,14 @@ let exportedMethods = {
         })
     },
     getUser(id) {
+        if(typeof id == 'string'){
+            id = new ObjectId(id);
+        }
+        console.log(typeof id);
+        console.log(id);
         return userCollection().then((users) => {
             return users.findOne({_id: id}, {password:false}).then((user) => {
-                console.log("USER:");
-                console.log(user);
-                //THERE IS A USER HERE SO MAYBE THE CHECK BELOW IS BROKEN?
-                //IF NOT IT'S COMING FROM SOMEWHERE ELSE SO GREP FOR THAT
-                if(!user){
+                if((user == null) || (user == undefined) || (user == {})){
                     throw "User not found";
                 }else{
                     return user;
@@ -74,11 +84,15 @@ let exportedMethods = {
             return users.insertOne(user);
         }).then((user) => {
             return this.getUser(user.insertedId).then((dbUser) => {
+                cache.set(dbUser._id.toString(), JSON.stringify(dbUser));
                 return dbUser;
             });
         });
     },
     removeRecipe(id) {
+        if(typeof id == 'string'){
+            id = new ObjectId(id);
+        }
         return recipeCollection().then((recipes) => {
             return recipes.removeOne({ _id: id }).then((deletionInfo) => {
                 if(deletionInfo.deletedCount === 0){
@@ -88,15 +102,23 @@ let exportedMethods = {
         });
     },
     removeUser(id) {
+        if(typeof id == 'string'){
+            id = new ObjectId(id);
+        }
         return userCollection().then((users) => {
             return users.removeOne({ _id: id }).then((deletionInfo) => {
                 if(deletionInfo.deletedCount === 0){
                     throw (`Could not delete user with id of ${id}`)
+                }else{
+                    return true;
                 }
             })
         });
     },
     updateRecipe(id, updatedRecipe){
+        if(typeof id == 'string'){
+            id = new ObjectId(id);
+        }
         return recipeCollection().then((recipes) => {
             let updateCommand = {
                 $set: updatedRecipe
@@ -107,12 +129,18 @@ let exportedMethods = {
         });
     },
     updateUser(id, updatedUser){
+        if(typeof id == 'string'){
+            id = new ObjectId(id);
+        }
         return userCollection().then((users) => {
             let updateCommand = {
                 $set: updatedUser
             };
             return users.updateOne({ _id: id}, updateCommand).then((result) => {
-                return this.getUser(id);
+                return this.getUser(id).then((user) => {
+                    cache.set(user._id.toString(), JSON.stringify(user));
+                    return user
+                });
             })
         });
     },
@@ -125,7 +153,7 @@ let exportedMethods = {
                     throw "No user found with those credentials"
                 }else{
                     return this.getUser(result._id).then((dbUser) => {
-                        this.cache.set(token, dbUser._id);
+                        cache.set(token.toString(), dbUser._id.toString());
                         return dbUser;
                     })
                 }

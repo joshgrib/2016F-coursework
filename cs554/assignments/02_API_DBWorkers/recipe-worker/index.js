@@ -88,7 +88,6 @@ redisConnection.on('get-users:*', (inData, channel) => {
 });
 
 redisConnection.on('update-user:*', (inData, channel) => {
-    console.log(inData);
     let messageId = inData.requestId;
     let id = inData.userId;
     let user = inData.user;
@@ -96,7 +95,7 @@ redisConnection.on('update-user:*', (inData, channel) => {
         .updateUser(id, user)
         .then((updatedUser) => {
             console.log('uu');
-            console.log()
+            console.log(updatedUser);
             redisConnection.emit(`user-updated:${messageId}`, updatedUser);
         }).catch((err) => {
             redisConnection.emit(`user-updated-failed:${messageId}`, err);
