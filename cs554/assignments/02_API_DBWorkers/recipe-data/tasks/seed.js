@@ -3,6 +3,20 @@ const recipeCollection = collections.recipes;
 const userCollection = collections.users;
 const data = require("../");
 
+const userList = [
+    {
+        username: "testuser0",
+        password: "password",
+        firstname: "Josh",
+        lastname: "User"
+    }, {
+        username: "testuser1",
+        password: "password",
+        firstname: "Other",
+        lastname: "User"
+    }
+];
+
 const recipeList = [
     {
         title: "Chemex Coffee",
@@ -71,45 +85,10 @@ const recipeList = [
     }
 ];
 
-const userList = [
-    {
-        username: "testuser0",
-        password: "password",
-        firstname: "Test",
-        lastname: "User"
-    }, {
-        username: "testuser1",
-        password: "password",
-        firstname: "Other",
-        lastname: "User"
-    }
-];
-
 let allRecipes = [];
 let allUsers = [];
 
-recipeCollection().then((recipes) => {
-    return recipes
-        .removeMany({})
-        .then(() => {
-            return recipes;
-        });
-}).then((recipes) => {
-    let allRecipes = recipeList.map(recipe => {
-        return data.addRecipe(recipe);
-    });
-    return Promise.all(allRecipes);
-}).then((newRecipes) => {
-    // match on water
-    return data.createRecipeRelationship(newRecipes[0]._id, newRecipes[1]._id);
-}).then(() => {
-    return data.getAllRecipes();
-}).then( (recipes) => {
-    console.log("Done seeding recipes");
-    console.log(recipes);
-});
-
-userCollection().then((users) => {
+let seedUsers = userCollection().then((users) => {
     return users
         .removeMany({})
         .then(() => {
@@ -125,4 +104,40 @@ userCollection().then((users) => {
 }).then((users) => {
     console.log("Done seeding users");
     console.log(users);
+})
+
+let testUserId = seedUsers.then(() => {
+    return userCollection().then((users) => {
+        return users
+            .findOne()
+            .then((user) =>  {
+                return user._id;
+            })
+    })
+})
+
+testUserId.then((testId) => {
+    recipeList.forEach((recipe) => {
+        recipe.createdBy = testId;
+    })
+    recipeCollection().then((recipes) => {
+        return recipes
+            .removeMany({})
+            .then(() => {
+                return recipes;
+            });
+    }).then((recipes) => {
+        let allRecipes = recipeList.map(recipe => {
+            return data.addRecipe(recipe);
+        });
+        return Promise.all(allRecipes);
+    }).then((newRecipes) => {
+        // match on water
+        return data.createRecipeRelationship(newRecipes[0]._id, newRecipes[1]._id);
+    }).then(() => {
+        return data.getAllRecipes();
+    }).then( (recipes) => {
+        console.log("Done seeding recipes");
+        console.log(recipes);
+    });
 })

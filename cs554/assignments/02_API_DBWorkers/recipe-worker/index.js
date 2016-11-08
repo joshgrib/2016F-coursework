@@ -83,6 +83,7 @@ redisConnection.on('get-users:*', (inData, channel) => {
         .then((users) => {
             redisConnection.emit(`users-got:${messageId}`, users);
         }).catch((err) => {
+            console.log(err);
             redisConnection.emit(`users-got-failed:${messageId}`, err);
         })
 });
@@ -94,10 +95,9 @@ redisConnection.on('update-user:*', (inData, channel) => {
     let updateUser = data
         .updateUser(id, user)
         .then((updatedUser) => {
-            console.log('uu');
-            console.log(updatedUser);
             redisConnection.emit(`user-updated:${messageId}`, updatedUser);
         }).catch((err) => {
+            console.log(err);
             redisConnection.emit(`user-updated-failed:${messageId}`, err);
         })
 });
@@ -109,16 +109,17 @@ redisConnection.on('delete-user:*', (inData, channel) => {
         .then(() => {
             redisConnection.emit(`user-deleted:${messageId}`, inData.userId);
         }).catch((err) => {
+            console.log(err);
             redisConnection.emit(`user-deleted-failed:${messageId}`, err);
         })
 });
 
 redisConnection.on('add-recipe:*', (inData, channel) => {
     let messageId = inData.requestId;
-    let addrecipe = data
+    let addRecipe = data
         .addRecipe(inData.recipe)
-        .then((newrecipe) => {
-            redisConnection.emit(`recipe-added:${messageId}`, newrecipe);
+        .then((newRecipe) => {
+            redisConnection.emit(`recipe-added:${messageId}`, newRecipe);
         }).catch( (err) => {
             console.log(err);
             redisConnection.emit(`recipe-added-failed:${messageId}`, err);
@@ -127,7 +128,7 @@ redisConnection.on('add-recipe:*', (inData, channel) => {
 
 redisConnection.on('get-recipe:*', (inData, channel) => {
     let messageId = inData.requestId;
-    let getrecipe = data
+    let getRecipe = data
         .getRecipe(inData.recipeId)
         .then((recipe) => {
             redisConnection.emit(`recipe-got:${messageId}`, recipe);
@@ -139,33 +140,55 @@ redisConnection.on('get-recipe:*', (inData, channel) => {
 
 redisConnection.on('get-recipes:*', (inData, channel) => {
     let messageId = inData.requestId;
-    let getrecipes = data
+    let getRecipes = data
         .getAllRecipes()
         .then((recipes) => {
             redisConnection.emit(`recipes-got:${messageId}`, recipes);
         }).catch((err) => {
+            console.log(err);
             redisConnection.emit(`recipes-got-failed:${messageId}`, err);
         })
 });
 
 redisConnection.on('update-recipe:*', (inData, channel) => {
     let messageId = inData.requestId;
-    let updaterecipe = data
-        .updateRecipe(inData.recipeId, inData.recipeData)
-        .then((updatedrecipe) => {
-            redisConnection.emit(`recipe-updated:${messageId}`, updatedrecipe);
-        }).catch((err) => {
-            redisConnection.emit(`recipe-updated-failed:${messageId}`, err);
+    let id = inData.recipeId;
+    let recipe = inData.recipe;
+    let updateRecipe = data
+        .checkRecipeOwner(recipeId, userId)
+        .then((isOwner) => {
+            if(isOwner){
+                return data.updateRecipe(id, recipe)
+                    .then((updatedRecipe) => {
+                        redisConnection.emit(`recipe-updated:${messageId}`, updatedRecipe);
+                    }).catch((err) => {
+                        console.log(err);
+                        redisConnection.emit(`recipe-updated-failed:${messageId}`, err);
+                    })
+            }else{
+                redisConnection.emit(`recipe-auth-failed:${messageId}`, 'Not Authorized');
+            }
         })
 });
 
 redisConnection.on('delete-recipe:*', (inData, channel) => {
     let messageId = inData.requestId;
-    let deleterecipe = data
-        .removeRecipe(inData.recipeId)
-        .then(() => {
-            redisConnection.emit(`recipe-deleted:${messageId}`);
-        }).catch((err) => {
-            redisConnection.emit(`recipe-deleted-failed:${messageId}`, err);
+    let recipeId = inData.recipeId;
+    let userId = inData.userId;
+    let deleteRecipe = data
+        .checkRecipeOwner(recipeId, userId)
+        .then((isOwner) => {
+            if(isOwner){
+                return data.removeRecipe(inData.recipeId)
+                    .then(() => {
+                        redisConnection.emit(`recipe-deleted:${messageId}`, inData.recipeId);
+                    }).catch((err) => {
+                        console.log(err);
+                        redisConnection.emit(`recipe-deleted-failed:${messageId}`, err);
+                    })
+            }else{
+                redisConnection.emit(`recipe-auth-failed:${messageId}`, 'Not Authorized');
+            }
         })
+        
 });

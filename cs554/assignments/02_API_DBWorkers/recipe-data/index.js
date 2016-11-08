@@ -43,8 +43,6 @@ let exportedMethods = {
         if(typeof id == 'string'){
             id = new ObjectId(id);
         }
-        console.log(typeof id);
-        console.log(id);
         return userCollection().then((users) => {
             return users.findOne({_id: id}, {password:false}).then((user) => {
                 if((user == null) || (user == undefined) || (user == {})){
@@ -139,8 +137,6 @@ let exportedMethods = {
             return users.findOne(
                 {username:username, password:password}
             ).then((result) => {
-                console.log('res');
-                console.log(result);
                 if(!result){
                     throw "No user found with those credentials"
                 }else{
@@ -153,6 +149,11 @@ let exportedMethods = {
                     })
                 }
             })
+        })
+    },
+    checkRecipeOwner(recipeId, userId){
+        return this.getRecipe(recipeId).then((recipe) => {
+            return recipe.createdBy == userId;
         })
     },
     createRecipeRelationship(firstRecipe, firstMatchAmount, secondRecipe, secondMatchAmount) {
