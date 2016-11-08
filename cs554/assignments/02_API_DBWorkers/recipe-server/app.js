@@ -68,6 +68,17 @@ app.use(bodyParser.urlencoded({extended: true}));
 app.use(rewriteUnsupportedBrowserMethods);
 app.use(checkHeaders);
 
+//clear out cache
+cache.keys('*', function (err, keys) {
+    if(err){
+        throw err;
+    }
+    for(var i = 0, len = keys.length; i < len; i++) {
+        cache.del(keys[i], (err,result) => {
+            if(err) throw err;
+        });
+    }
+});
 
 
 app.engine('handlebars', handlebarsInstance.engine);

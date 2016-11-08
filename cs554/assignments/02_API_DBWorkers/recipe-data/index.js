@@ -18,8 +18,7 @@ let exportedMethods = {
     getAllUsers() {
         return userCollection().then((users) => {
             return users
-                //uncomment below to hide sensitive stuff from results
-                .find({}/*, {password:false, _id:false, authToken:false}*/)
+                .find({}, {password:false, _id:false})
                 .toArray().then((result) => {
                     cache.set('user-list', JSON.stringify(result));
                     return result;

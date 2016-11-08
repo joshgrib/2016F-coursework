@@ -14,29 +14,40 @@ const redisConnection = new NRP(config); // This is the NRP client
 var redis = require("redis");
 var cache = redis.createClient(6379, 'localhost');
 
+const CHECK_CACHE = true;
+
 //add a user
 router.post("/", (req, res) => {
+    //no need to check cache here
     let newUser = req.body.user;
     let redisConnection = req.app.get("redis");
     let messageId = uuid.v4();
 
     redisConnection.on(`user-added:${messageId}`, (userAdded, channel) => {
-        res.json(userAdded);
         redisConnection.off(`user-added:${messageId}`);
         redisConnection.off(`user-added-failed:${messageId}`);
         clearTimeout(killswitchTimeoutId);
+
+        //save user to cache
+        let idString = userAdded._id.toString();
+        let userString = JSON.stringify(userAdded);
+        cache.set(idString, userString);
+
+        res.json(userAdded);
     });
 
     redisConnection.on(`user-added-failed:${messageId}`, (error, channel) => {
-        res.status(500).json(error);
         redisConnection.off(`user-added:${messageId}`);
         redisConnection.off(`user-added-failed:${messageId}`);
         clearTimeout(killswitchTimeoutId);
+        
+        res.status(500).json(error);
     });
 
     killswitchTimeoutId = setTimeout(() => {
         redisConnection.off(`user-added:${messageId}`);
         redisConnection.off(`user-added-failed:${messageId}`);
+
         res.status(500).json({error: "Timeout error"})
     }, 5000);
 
@@ -73,51 +84,77 @@ router.post("/session", (req, res) => {
 //get user info
 router.get("/:id", (req, res) => {
     let userId = req.params.id;
+
     let redisConnection = req.app.get("redis");
     let messageId = uuid.v4();
 
     redisConnection.on(`user-got:${messageId}`, (user, channel) => {
-        res.json(user);
         redisConnection.off(`user-got:${messageId}`);
         redisConnection.off(`user-got-failed:${messageId}`);
         clearTimeout(killswitchTimeoutId);
+
+        let idString = user._id.toString();
+        let userString = JSON.stringify(user);
+        cache.set(idString, userString);
+
+        res.json(user);
     });
 
     redisConnection.on(`user-got-failed:${messageId}`, (error, channel) => {
-        res.status(500).json(error);
         redisConnection.off(`user-got:${messageId}`);
         redisConnection.off(`user-got-failed:${messageId}`);
         clearTimeout(killswitchTimeoutId);
+
+        res.status(500).json(error);
     });
 
     killswitchTimeoutId = setTimeout(() => {
         redisConnection.off(`user-got:${messageId}`);
         redisConnection.off(`user-got-failed:${messageId}`);
+
         res.status(500).json({error: "Timeout error"})
     }, 5000);
 
-    redisConnection.emit(`get-user:${messageId}`, {
-        requestId: messageId,
-        userId: userId
+    cache.get(authTokenString, (err, result) => {
+        if(err || !result){
+            res.status(500).send("Error getting cached user ID");
+
+            redisConnection.off(`user-updated:${messageId}`);
+            redisConnection.off(`user-updated-failed:${messageId}`);
+            clearTimeout(killswitchTimeoutId);
+        }else{
+            let idString = userId.toString();
+            cache.get(idString, (err, result) => {
+                if(!err && result){
+                    redisConnection.off(`user-updated:${messageId}`);
+                    redisConnection.off(`user-updated-failed:${messageId}`);
+                    clearTimeout(killswitchTimeoutId);
+                    return res.json(JSON.parse(result));
+                }else{
+                    redisConnection.emit(`get-user:${messageId}`, {
+                        requestId: messageId,
+                        userId: userId
+                    });   
+                }
+            });
+
+        }
     });
 });
 
 //get info for all users
 router.get("/", (req, res) => {
+
     let redisConnection = req.app.get("redis");
     let messageId = uuid.v4();
 
-    cache.get('user-list', (err, result) => {
-        console.log("User list:");
-        if(err || !result){
-            console.log("user list not cached yet");
-        }else{
-            console.log(result);
-        }
-    });
-
     redisConnection.on(`users-got:${messageId}`, (users, channel) => {
+        let idString = 'user-list';
+        let usersString = JSON.stringify(users);
+        cache.set(idString, usersString);
+
         res.json(users);
+
         redisConnection.off(`users-got:${messageId}`);
         redisConnection.off(`users-got-failed:${messageId}`);
         clearTimeout(killswitchTimeoutId);
@@ -125,6 +162,7 @@ router.get("/", (req, res) => {
 
     redisConnection.on(`users-got-failed:${messageId}`, (error, channel) => {
         res.status(500).json(error);
+
         redisConnection.off(`users-got:${messageId}`);
         redisConnection.off(`users-got-failed:${messageId}`);
         clearTimeout(killswitchTimeoutId);
@@ -133,11 +171,22 @@ router.get("/", (req, res) => {
     killswitchTimeoutId = setTimeout(() => {
         redisConnection.off(`users-got:${messageId}`);
         redisConnection.off(`users-got-failed:${messageId}`);
+
         res.status(500).json({error: "Timeout error"})
     }, 5000);
 
-    redisConnection.emit(`get-users:${messageId}`, {
-        requestId: messageId
+    //check cache
+    cache.get('user-list', (err, result) => {
+        if(!err && result){
+            redisConnection.off(`user-updated:${messageId}`);
+            redisConnection.off(`user-updated-failed:${messageId}`);
+            clearTimeout(killswitchTimeoutId);
+            return res.json(JSON.parse(result));
+        }else{
+            redisConnection.emit(`get-users:${messageId}`, {
+                requestId: messageId
+            });
+        }
     });
 });
 
@@ -148,7 +197,6 @@ router.put("/", (req, res) => {
     let isAuthorized = res.get('isAuthorized');
     if(isAuthorized === 'false'){
         res.sendStatus(401);
-        return;
     }
 
     let redisConnection = req.app.get("redis");
@@ -156,34 +204,33 @@ router.put("/", (req, res) => {
 
     redisConnection.on(`user-updated:${messageId}`, (users, channel) => {
         res.json(users);
+
         redisConnection.off(`user-updated:${messageId}`);
         redisConnection.off(`user-updated-failed:${messageId}`);
         clearTimeout(killswitchTimeoutId);
-        return;
     });
 
     redisConnection.on(`user-updated-failed:${messageId}`, (error, channel) => {
         res.status(500).json(error);
+
         redisConnection.off(`user-updated:${messageId}`);
         redisConnection.off(`user-updated-failed:${messageId}`);
         clearTimeout(killswitchTimeoutId);
-        return;
     });
 
     killswitchTimeoutId = setTimeout(() => {
         redisConnection.off(`user-updated:${messageId}`);
         redisConnection.off(`user-updated-failed:${messageId}`);
+
         res.status(500).json({error: "Timeout error"})
-        return;
     }, 5000);
 
-
- 
     let authToken = req.get('Auth-Token');
     let authTokenString = authToken.toString();
     cache.get(authTokenString, (err, result) => {
         if(err || !result){
             res.status(500).send("Error getting cached user ID");
+
             redisConnection.off(`user-updated:${messageId}`);
             redisConnection.off(`user-updated-failed:${messageId}`);
             clearTimeout(killswitchTimeoutId);
@@ -203,7 +250,6 @@ router.delete("/", (req, res) => {
     let isAuthorized = res.get('isAuthorized');
     if(isAuthorized === 'false'){
         res.sendStatus(401);
-        return;
     }
 
     let redisConnection = req.app.get("redis");
@@ -211,6 +257,7 @@ router.delete("/", (req, res) => {
 
     redisConnection.on(`user-deleted:${messageId}`, (users, channel) => {
         res.json(users);
+
         redisConnection.off(`user-deleted:${messageId}`);
         redisConnection.off(`user-deleted-failed:${messageId}`);
         clearTimeout(killswitchTimeoutId);
@@ -218,6 +265,7 @@ router.delete("/", (req, res) => {
 
     redisConnection.on(`user-deleted-failed:${messageId}`, (error, channel) => {
         res.status(500).json(error);
+
         redisConnection.off(`user-deleted:${messageId}`);
         redisConnection.off(`user-deleted-failed:${messageId}`);
         clearTimeout(killswitchTimeoutId);
@@ -226,6 +274,7 @@ router.delete("/", (req, res) => {
     killswitchTimeoutId = setTimeout(() => {
         redisConnection.off(`user-deleted:${messageId}`);
         redisConnection.off(`user-deleted-failed:${messageId}`);
+
         res.status(500).json({error: "Timeout error"})
     }, 5000);
 
