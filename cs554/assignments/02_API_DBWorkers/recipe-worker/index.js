@@ -116,8 +116,11 @@ redisConnection.on('delete-user:*', (inData, channel) => {
 
 redisConnection.on('add-recipe:*', (inData, channel) => {
     let messageId = inData.requestId;
+    let recipe = inData.recipe
+    let userId = inData.userId;
+    recipe.createdBy = userId;
     let addRecipe = data
-        .addRecipe(inData.recipe)
+        .addRecipe(recipe)
         .then((newRecipe) => {
             redisConnection.emit(`recipe-added:${messageId}`, newRecipe);
         }).catch( (err) => {
@@ -131,7 +134,15 @@ redisConnection.on('get-recipe:*', (inData, channel) => {
     let getRecipe = data
         .getRecipe(inData.recipeId)
         .then((recipe) => {
-            redisConnection.emit(`recipe-got:${messageId}`, recipe);
+            let userId = recipe.createdBy;
+            data.getUser(userId).then((user) => {
+                recipe.createdBy = user;
+                redisConnection.emit(`recipe-got:${messageId}`, recipe);
+            }).catch((err) => {
+                console.log('err');
+                console.log(err);
+                throw err
+            })
         }).catch((err) => {
             console.log(err);
             redisConnection.emit(`recipe-got-failed:${messageId}`, err);
@@ -143,7 +154,14 @@ redisConnection.on('get-recipes:*', (inData, channel) => {
     let getRecipes = data
         .getAllRecipes()
         .then((recipes) => {
-            redisConnection.emit(`recipes-got:${messageId}`, recipes);
+            let addUsers = recipes.map((recipe) => {
+                let userId = recipe.createdBy;
+                recipe.createdBy = data.getUser(userId);
+                return recipe;
+            })
+            return Promise.all(addUsers)
+        }).then((recipeList) => {
+            redisConnection.emit(`recipes-got:${messageId}`, recipeList);
         }).catch((err) => {
             console.log(err);
             redisConnection.emit(`recipes-got-failed:${messageId}`, err);

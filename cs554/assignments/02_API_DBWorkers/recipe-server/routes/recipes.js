@@ -14,7 +14,7 @@ const redisConnection = new NRP(config); // This is the NRP client
 var redis = require("redis");
 var cache = redis.createClient(6379, 'localhost');
 
-const CHECK_CACHE = false;
+const CHECK_CACHE = true;
 
 //add a recipe
 router.post("/", (req, res) => {
@@ -61,7 +61,7 @@ router.post("/", (req, res) => {
     let authTokenString = authToken.toString();
     cache.get(authTokenString, (err, result) => {
         if(err || !result){
-            res.status(500).send("Error getting cached recipe ID");
+            res.sendStatus(401);
             redisConnection.off(`recipe-added:${messageId}`);
             redisConnection.off(`recipe-added-failed:${messageId}`);
             clearTimeout(killswitchTimeoutId);
@@ -83,6 +83,7 @@ router.get("/:id", (req, res) => {
     let messageId = uuid.v4();
 
     redisConnection.on(`recipe-got:${messageId}`, (recipe, channel) => {
+        console.log(recipe);
         redisConnection.off(`recipe-got:${messageId}`);
         redisConnection.off(`recipe-got-failed:${messageId}`);
         clearTimeout(killswitchTimeoutId);
@@ -228,7 +229,7 @@ router.put("/:id", (req, res) => {
     let authTokenString = authToken.toString();
     cache.get(authTokenString, (err, result) => {
         if(err || !result){
-            res.status(500).send("Error getting cached recipe ID");
+            res.sendStatus(401);
 
             redisConnection.off(`recipe-updated:${messageId}`);
             redisConnection.off(`recipe-updated-failed:${messageId}`);

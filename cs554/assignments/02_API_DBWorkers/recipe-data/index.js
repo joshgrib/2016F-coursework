@@ -7,12 +7,28 @@ var ObjectId = require('mongodb').ObjectId;
 var redis = require("redis");
 var cache = redis.createClient(6379, 'localhost');
 
+let addUserToRecipe = (recipe) => {
+    let userId = recipe.createdBy;
+    return exportedMethods.getUser(userId).then((user) => {
+        recipe.createdBy = user;
+        return recipe;
+    })
+}
+
 let exportedMethods = {
     getAllRecipes() {
         return recipeCollection().then((recipes) => {
             return recipes
                 .find()
-                .toArray();
+                .toArray()
+                .then((result) => {
+                    cache.set('recipe-list', JSON.stringify(result));
+                    console.log(result);
+                    return Promise.all(Array.from(result, addUserToRecipe));
+                }).then((res) => {
+                    return res;
+                })
+                
         });
     },
     getAllUsers() {

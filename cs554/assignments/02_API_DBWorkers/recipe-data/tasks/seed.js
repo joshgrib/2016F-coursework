@@ -109,7 +109,7 @@ let seedUsers = userCollection().then((users) => {
 let testUserId = seedUsers.then(() => {
     return userCollection().then((users) => {
         return users
-            .findOne()
+            .findOne({})
             .then((user) =>  {
                 return user._id;
             })

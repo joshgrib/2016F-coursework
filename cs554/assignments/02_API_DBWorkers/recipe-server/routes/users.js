@@ -14,7 +14,7 @@ const redisConnection = new NRP(config); // This is the NRP client
 var redis = require("redis");
 var cache = redis.createClient(6379, 'localhost');
 
-const CHECK_CACHE = false;
+const CHECK_CACHE = true;
 
 //add a user
 router.post("/", (req, res) => {
