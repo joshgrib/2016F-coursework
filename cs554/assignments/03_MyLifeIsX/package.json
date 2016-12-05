@@ -1,0 +1,51 @@
+{
+  "name": "cs-554-quickstart",
+  "version": "1.0.0",
+  "description": "An Express Angular 2 Quickstart designed for CS-554",
+  "scripts": {
+    "start": "tsc && concurrently \"tsc -w\" \"node server/app.js\" ",
+    "tsc": "tsc",
+    "tsc:w": "tsc -w",
+    "lint": "tslint ./app/**/*.ts -t verbose"
+  },
+  "keywords": [],
+  "author": "",
+  "licenses": [
+    {
+      "type": "MIT",
+      "url": "https://github.com/angular/angular.io/blob/master/LICENSE"
+    }
+  ],
+  "dependencies": {
+    "@angular/common": "~2.1.2",
+    "@angular/compiler": "~2.1.2",
+    "@angular/core": "~2.1.2",
+    "@angular/forms": "~2.1.2",
+    "@angular/http": "~2.1.2",
+    "@angular/platform-browser": "~2.1.2",
+    "@angular/platform-browser-dynamic": "~2.1.2",
+    "@angular/router": "~3.1.2",
+    "@angular/upgrade": "~2.1.2",
+    "angular-in-memory-web-api": "~0.1.13",
+    "body-parser": "^1.15.2",
+    "core-js": "^2.4.1",
+    "express": "^4.14.0",
+    "reflect-metadata": "^0.1.8",
+    "rxjs": "5.0.0-beta.12",
+    "systemjs": "0.19.40",
+    "zone.js": "^0.6.26"
+  },
+  "devDependencies": {
+    "@types/core-js": "^0.9.34",
+    "@types/jasmine": "^2.5.36",
+    "@types/node": "^6.0.46",
+    "canonical-path": "0.0.2",
+    "concurrently": "^3.1.0",
+    "core-js": "^2.4.1",
+    "lodash": "^4.16.4",
+    "rimraf": "^2.5.4",
+    "tslint": "^4.0.0-dev.1",
+    "typescript": "^2.1.0-dev.20161107"
+  },
+  "repository": {}
+}
