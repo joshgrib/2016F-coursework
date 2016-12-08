@@ -1,0 +1,16 @@
+<div ng-controller="formController">
+    <form>
+        <h2>Let's make a post!</h2>
+        <label for="title">Title:</label>
+        <input ng-model="newPost.title" ng-change="alert('Hey')" type="text" id="title" required>
+        <br />
+        <label for="body">Body:</label>
+        <textarea ng-model="newPost.body" type="text" id="body" required>
+        </textarea>
+        <br />
+        <button type="submit">Submit</button>
+    </form>
+    <article>
+        Form: <pre>{{ newPost }}</pre>
+    </article>
+</div>

@@ -4,12 +4,12 @@ import { HttpModule, JsonpModule } from '@angular/http';
 import { RouterModule } from '@angular/router';
 
 import { AppComponent } from "./components/app/app.component";
-import { BookFormComponent } from "./components/book-form/book-form.component";
-import { BookComponent } from "./components/book/book.component";
-import { BookDetailComponent } from "./components/book-detail/book-detail.component";
-import { BookListComponent } from "./components/book-list/book-list.component";
+import { PostFormComponent } from "./components/post-form/post-form.component";
+import { PostComponent } from "./components/post/post.component";
+import { PostDetailComponent } from "./components/post-detail/post-detail.component";
+import { PostListComponent } from "./components/post-list/post-list.component";
 
-import { BookService } from "./services/books/books.service";
+import { PostService } from "./services/posts/posts.service";
 
 @NgModule({
   imports: [
@@ -19,18 +19,18 @@ import { BookService } from "./services/books/books.service";
     RouterModule.forRoot([
       {
         path: '',
-        redirectTo: 'book-list',
+        redirectTo: 'post-list',
         pathMatch: 'full'
       },
-      { path: 'book-list', component: BookListComponent },
-      { path: 'book-list/new', component: BookFormComponent },
-      { path: 'book-list/:id', component: BookDetailComponent }
+      { path: 'post-list', component: PostListComponent },
+      { path: 'post-list/new', component: PostFormComponent },
+      { path: 'post-list/:id', component: PostDetailComponent }
     ])
   ],
   declarations: [
-    BookComponent, BookListComponent, AppComponent, BookDetailComponent, BookFormComponent
+    PostComponent, PostListComponent, AppComponent, PostDetailComponent, PostFormComponent
   ],
-  providers: [BookService],
+  providers: [PostService],
   bootstrap: [AppComponent]
 })
 

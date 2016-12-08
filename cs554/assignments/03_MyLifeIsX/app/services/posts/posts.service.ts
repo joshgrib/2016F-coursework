@@ -1,5 +1,5 @@
 import { Injectable } from "@angular/core";
-import { IBook } from "../../interfaces/books/ibook";
+import { IPost } from "../../interfaces/posts/ipost";
 
 import { Http, Response, URLSearchParams } from '@angular/http';
 import { Observable } from 'rxjs/Observable';
@@ -7,60 +7,60 @@ import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/toPromise';
 
 @Injectable()
-export class BookService {
-    private _bookUrl: string = "/books";
+export class PostService {
+    private _postUrl: string = "/posts";
 
     constructor(private http: Http) {
     }
 
-    async getAllBooks(): Promise<IBook[]> {
-        return this.http.get(this._bookUrl)
+    async getAllPosts(): Promise<IPost[]> {
+        return this.http.get(this._postUrl)
             .map(res => {
                 return res.json() || [];
             })
             .toPromise();
     };
 
-    async getBookById(id: number) {
-        return this.http.get(`${this._bookUrl}/${id}`)
+    async getPostById(id: number) {
+        return this.http.get(`${this._postUrl}/${id}`)
             .map(res => {
                 return res.json() || undefined;
             })
             .toPromise();
     };
 
-    async createBook(newBook: IBook) {
-        return this.http.post(`${this._bookUrl}`, newBook)
+    async createPost(newPost: IPost) {
+        return this.http.post(`${this._postUrl}`, newPost)
             .map(res => {
                 return res.json() || undefined;
             })
             .toPromise();
     };
 
-    async updateBook(updatedBook: IBook) {
-        return this.http.put(`${this._bookUrl}`, updatedBook)
+    async updatePost(updatedPost: IPost) {
+        return this.http.put(`${this._postUrl}`, updatedPost)
             .map(res => {
                 return res.json() || undefined;
             })
             .toPromise();
     };
 
-    async deleteBook(id: number) {
-        return this.http.delete(`${this._bookUrl}/${id}`)
+    async deletePost(id: number) {
+        return this.http.delete(`${this._postUrl}/${id}`)
             .map(res => {
                 return res.json() || undefined;
             })
             .toPromise();
     };
 
-    async searchBooks(searchData: IBook): Promise<IBook[]> {
+    async searchPosts(searchData: IPost): Promise<IPost[]> {
         let params: URLSearchParams = new URLSearchParams();
 
         Object.keys(searchData).forEach((key) => {
             params.set(key, searchData[key]);
         });
 
-        return this.http.get(this._bookUrl, { search: params })
+        return this.http.get(this._postUrl, { search: params })
             .map(res => {
                 return res.json() || [];
             })
