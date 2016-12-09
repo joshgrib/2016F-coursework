@@ -6,5 +6,6 @@ import {IPost} from "../../interfaces/posts/ipost";
     templateUrl: "./app/components/post-form/post-form.component.html"
 })
 export class PostFormComponent {
+    newPost: IPost;
     @Input() post: IPost;
 }

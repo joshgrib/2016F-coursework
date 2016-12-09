@@ -11,9 +11,9 @@ function makePost(title, body, imageUrl) {
     };
 }
 
-postList.push(makePost('Post 1', 'This is my post1 body'));
-postList.push(makePost('Post 2', 'This is my post2 body', 'http://www.placecage.com/c/500/300'));
-postList.push(makePost('Post 3', 'This is my post3 body', 'http://www.placecage.com/c/500/300'));
+for(let i=0; i<25; i++){
+    postList.push(makePost(`Post ${i}`, `This is the body of post ${i}`, 'http://www.placecage.com/c/500/300'));
+}
 
 router.get("/", (req, res) => {
     res.json(postList);
