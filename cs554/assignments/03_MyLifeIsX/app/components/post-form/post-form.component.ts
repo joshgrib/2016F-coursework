@@ -18,5 +18,10 @@ export class PostFormComponent {
         return await this.postService.createPost(newPost);
     }
 
+    onSubmit(){
+        console.log("Form submitted");
+        //$location.path('/');
+    }
+
     constructor(private postService: PostService) { }
 }

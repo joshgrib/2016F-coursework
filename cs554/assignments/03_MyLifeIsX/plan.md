@@ -21,3 +21,10 @@ Form to add a post, markdown preview
 **12/6/16** - new post form(including markdown preview), possibly backend
 **12/7/16** - big and small post components, maybe home page
 **12/8/16** - whatevers left
+
+
+##TODO
+Redirect on form submit
+Check form input
+Form markdown render
+Maybe upload image file instead of url
