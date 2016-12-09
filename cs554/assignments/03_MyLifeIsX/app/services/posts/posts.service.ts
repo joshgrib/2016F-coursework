@@ -22,7 +22,7 @@ export class PostService {
     };
 
     async getSomePosts(pageNum: number): Promise<IPost[]> {
-        return this.http.get(this._postUrl + '/' + pageNum)
+        return this.http.get(`${this._postUrl }/list/${pageNum}`)
             .map(res => {
                 return res.json() || [];
             })
