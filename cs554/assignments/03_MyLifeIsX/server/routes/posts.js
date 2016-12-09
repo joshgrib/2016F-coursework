@@ -12,7 +12,7 @@ function makePost(title, body, imageUrl) {
 }
 
 for(let i=0; i<25; i++){
-    postList.push(makePost(`Post ${i}`, `This is the body of post ${i}`, 'http://www.placecage.com/c/500/300'));
+    postList.unshift(makePost(`Post ${i}`, `This is the body of post ${i}`, 'http://www.placecage.com/c/500/300'));
 }
 
 router.get("/", (req, res) => {
@@ -27,19 +27,20 @@ router.get("/list/:pageNum", (req, res) => {
     2               41-60
     */
     const pageNum = parseInt(req.params.pageNum);
+    let sortedPostList = postList;//.reverse();
 
     let minRecordID = (pageNum * 20) + 1;
     let maxRecordID = (pageNum + 1) * 20;
 
-    if(postList.length < minRecordID){
+    if(sortedPostList.length < minRecordID){
         res.sendStatus(404);
         return;
     }
-    if(postList.length < maxRecordID){
-        maxRecordID = postList.length;
+    if(sortedPostList.length < maxRecordID){
+        maxRecordID = sortedPostList.length;
     }
-    
-    let resultList = postList.slice(minRecordID, maxRecordID + 1);
+
+    let resultList = sortedPostList.slice(minRecordID, maxRecordID + 1);
     res.json(resultList);
 });
 
@@ -61,7 +62,7 @@ router.post("/", (req, res) => {
     let body = req.body.body;
     let imageUrl = req.body.imageUrl;
     let p = makePost(title, body, imageUrl);
-    postList.push(p);
+    postList.unshift(p);
     res.json(p);
 
 });

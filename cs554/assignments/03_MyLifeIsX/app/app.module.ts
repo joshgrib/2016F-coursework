@@ -27,7 +27,8 @@ import { PostService } from "./services/posts/posts.service";
       { path: 'posts', component: PostListComponent },
       { path: 'posts/new', component: PostFormComponent },
       { path: 'posts/:id', component: PostDetailComponent },
-      { path: 'archive/:id', component: PostListComponent }
+      { path: 'archive/:id', component: PostListComponent },
+      { path: '', redirectTo: 'posts', pathMatch: 'full' }
     ])
   ],
   declarations: [

@@ -14,8 +14,12 @@ export class PostListComponent implements OnInit {
 
     async ngOnInit() {
         let pageNum = parseInt(this.route.snapshot.params['id']);
-        console.log('pn: ' + pageNum);
-        this.postList = await this.postService.getSomePosts(pageNum);
+        if(isNaN(pageNum)){
+            this.postList = await this.postService.getSomePosts(0);
+        }else{
+            this.postList = await this.postService.getSomePosts(pageNum);
+        }
+        
     }
 
     constructor(private postService: PostService,
