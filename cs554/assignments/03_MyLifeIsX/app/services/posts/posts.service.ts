@@ -8,7 +8,7 @@ import 'rxjs/add/operator/toPromise';
 
 @Injectable()
 export class PostService {
-    private _postUrl: string = "/posts";
+    private _postUrl: string = "/p";
 
     constructor(private http: Http) {
     }
@@ -21,6 +21,14 @@ export class PostService {
             .toPromise();
     };
 
+    async getSomePosts(pageNum: number): Promise<IPost[]> {
+        return this.http.get(this._postUrl + '/' + pageNum)
+            .map(res => {
+                return res.json() || [];
+            })
+            .toPromise();
+    }
+
     async getPostById(id: number) {
         return this.http.get(`${this._postUrl}/${id}`)
             .map(res => {
@@ -29,7 +37,7 @@ export class PostService {
             .toPromise();
     };
 
-    async createPost(newPost: IPost) {
+    async createPost(newPost: any) {
         return this.http.post(`${this._postUrl}`, newPost)
             .map(res => {
                 return res.json() || undefined;

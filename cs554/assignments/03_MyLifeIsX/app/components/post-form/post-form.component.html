@@ -1,18 +1,23 @@
 <div>
-    <form>
+    <form (ngSubmit)="onSubmit()">
+        {{diagnostic}}
         <h2>Let's make a post!</h2>
         <label for="title">Title:</label>
-        <input ng-model="newPost.title" type="text" id="title" required>
+        <input [(ngModel)]="model.title" type="text" id="title" name="postTitle" value="{{model.title}}" required>
         <br />
         <label for="body">Body:</label>
-        <textarea ng-model="newPost.body" type="text" id="body" required>
+        <textarea [(ngModel)]="model.body" type="text" id="body" name="postBody" value="{{model.body}}" required>
         </textarea>
         <br />
-        <button type="submit">Submit</button>
+        <label for="title">Image URL:</label>
+        <input [(ngModel)]="model.imageUrl" type="text" id="imageUrl" name="postImageUrl" value="{{model.imageUrl}}">
+        <br />
+        <button type="button" (click)="newPost()" >Submit</button>
     </form>
+    <hr />
     <article>
-        <p>Form:</p>
-        <pre>{{ newPost }}</pre>
-        <pre>{{post}}</pre>
+        <h2>{{ model.title }}</h2>
+        <p>{{ model.body }}</p>
+        <img src="{{ model.imageUrl }}"/>
     </article>
 </div>

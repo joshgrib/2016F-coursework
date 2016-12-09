@@ -8,8 +8,6 @@
   <base href="/">
   <link rel="stylesheet" href="/public/css/styles.css">
 
-  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.7/angular.min.js"></script>
-
   <!-- Polyfill(s) for older browsers -->
   <script src="/public/js/node_modules/core-js/client/shim.min.js"></script>
 
@@ -20,11 +18,21 @@
   <script src="/public/js/systemjs.config.js"></script>
   <script>
       System.import('app').catch(function(err){ console.error(err); });
-    </script>
+  </script>
+  
 </head>
 
 <body>
-  <post-app>Loading...</post-app>
+    <!--
+    <form action="/posts" method="post" id="myForm" name="myForm">
+        <input type="text" id="postTitle" name="postTitle" required>
+        <textarea type="text" id="postBody" name="postBody" required>
+        </textarea>
+        <input type="text" id="postImageUrl" name="postImageUrl">
+        <button type="submit" value="Submit">Submit</button>
+    </form>
+    -->
+    <post-app>Loading...</post-app>
 </body>
 
 </html>
