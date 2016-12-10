@@ -29,8 +29,8 @@ router.get("/list/:pageNum", (req, res) => {
     const pageNum = parseInt(req.params.pageNum);
     let sortedPostList = postList;//.reverse();
 
-    let minRecordID = (pageNum * 20) + 1;
-    let maxRecordID = (pageNum + 1) * 20;
+    let minRecordID = (pageNum * 20);
+    let maxRecordID = ((pageNum + 1) * 20) - 1;
 
     if(sortedPostList.length < minRecordID){
         res.sendStatus(404);

@@ -12,7 +12,9 @@
         <label for="title">Image URL:</label>
         <input [(ngModel)]="model.imageUrl" type="text" id="imageUrl" name="postImageUrl" value="{{model.imageUrl}}">
         <br />
-        <button type="button" (click)="newPost()" >Submit</button>
+        <a (click)="newPost()" routerLink="/posts">
+            <button type="button"  >Submit</button>
+        </a>
     </form>
     <hr />
     <article>

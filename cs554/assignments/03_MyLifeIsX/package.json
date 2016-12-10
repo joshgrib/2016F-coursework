@@ -27,9 +27,14 @@
     "@angular/router": "~3.1.2",
     "@angular/upgrade": "~2.1.2",
     "angular-in-memory-web-api": "~0.1.13",
+    "angular-marked": "^1.2.2",
+    "angular2-markdown": "^1.3.2",
     "body-parser": "^1.15.2",
     "core-js": "^2.4.1",
     "express": "^4.14.0",
+    "jspm": "^0.16.48",
+    "markdown": "^0.5.0",
+    "ng-showdown": "^1.1.0",
     "reflect-metadata": "^0.1.8",
     "rxjs": "5.0.0-beta.12",
     "systemjs": "0.19.40",
@@ -42,10 +47,19 @@
     "canonical-path": "0.0.2",
     "concurrently": "^3.1.0",
     "core-js": "^2.4.1",
+    "jspm": "^0.16.48",
     "lodash": "^4.16.4",
     "rimraf": "^2.5.4",
     "tslint": "^4.0.0-dev.1",
     "typescript": "^2.1.0-dev.20161107"
   },
-  "repository": {}
+  "repository": {},
+  "jspm": {
+    "dependencies": {
+      "ng2-markdown-component": "github:evanplaice/ng2-markdown@^0.2.3"
+    },
+    "devDependencies": {
+      "typescript": "npm:typescript@^2.0.7"
+    }
+  }
 }
