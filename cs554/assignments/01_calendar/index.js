@@ -36,6 +36,30 @@ const handlebarsInstance = exphbs.create({
         addOne: (obj) => {
             return obj+1;
         },
+        nextMonthMonth: (monthNum) => {
+            if(monthNum == 12){
+                return 1
+            }
+            return monthNum + 1
+        },
+        nextMonthYear: (yearNum, monthNum) => {
+            if(monthNum == 12){
+                return yearNum + 1
+            }
+            return yearNum
+        },
+        prevMonthMonth: (monthNum) => {
+            if(monthNum == 1){
+                return 12
+            }
+            return monthNum - 1
+        },
+        prevMonthYear: (yearNum, monthNum) => {
+            if(monthNum == 1){
+                return yearNum - 1
+            }
+            return yearNum
+        },
         math: (lvalue, operator, rvalue, options) => {
             lvalue = parseFloat(lvalue);
             rvalue = parseFloat(rvalue);
